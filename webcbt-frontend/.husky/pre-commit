@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd webcbt-frontend
+npm run prettier
+npm run eslint-fix
+npm run stylelint-fix
+git add .
