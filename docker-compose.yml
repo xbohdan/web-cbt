@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  web:
+    build: ./webcbt-frontend
+    ports: 
+      - 3000:3000
+  api:
+    build: ./WebCbt-Backend
+    ports:
+      - 44365:44365
+    environment:                             # environ variables
+      DB_URL: mongodb://db/webcbt            # value should be database connection string
+  db:
+    image: mongo:4.0-xenial
+    ports: 
+      - 27017:27017                          # default port for mongodb
+    volumes: 
+      - webcbt:/data/db
+
+volumes:
+  webcbt:
