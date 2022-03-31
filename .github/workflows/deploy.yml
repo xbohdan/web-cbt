@@ -29,8 +29,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
           source: "."
           target: "/var/www/web-cbt"
           
@@ -39,8 +39,8 @@ jobs:
         with:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
-            password: ${{ secrets.PASSWORD }}
             port: ${{ secrets.PORT }}
+            key: ${{ secrets.KEY }}
             script: |
               cd /var/www/web-cbt
               docker compose stop
