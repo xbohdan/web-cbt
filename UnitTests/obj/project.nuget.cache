@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "WV7I5b5anJc8mgO6ljsowilR4teawmcqD8LxVbTIglDTjLNTV77VR401BPlHCfdjzQPPxyc7SR3MokrPcgnx4Q==",
+  "success": false,
+  "projectFilePath": "C:\\Semester 6\\SE2\\project\\web-cbt\\UnitTests\\UnitTests.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Проект WebCbt-Backend несовместим с net5.0 (.NETCoreApp,Version=v5.0). Проект WebCbt-Backend поддерживает: net6.0 (.NETCoreApp,Version=v6.0)",
+      "libraryId": "WebCbt-Backend",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
+}
