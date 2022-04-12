@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Installation
 1. Clone this repository.
-2. Navigate to `/webcrt-frontend/` folder and install all dependencies via the command line:
+2. Navigate to `/webcbt-frontend/` folder and install all dependencies via the command line:
 > npm i
 3. Start the website via the command line:
 > npm start

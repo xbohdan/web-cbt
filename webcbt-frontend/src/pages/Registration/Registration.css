@@ -1,0 +1,14 @@
+.registration {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  grid-area: content;
+}
+
+.authSupform {
+  margin-bottom: 28px;
+}
+
+.authSubform {
+  margin-top: 28px;
+}
