@@ -1,0 +1,6 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  grid-area: footer;
+  text-align: left;
+}
