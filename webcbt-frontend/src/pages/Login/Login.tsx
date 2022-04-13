@@ -3,14 +3,11 @@ import {
   Form,
   Typography,
   Input,
-  Radio,
-  InputNumber,
   Button,
-  RadioChangeEvent,
 } from 'antd';
 import {Link} from 'react-router-dom';
 
-import './Registration.css';
+import './Login.css';
 
 const {Title} = Typography;
 
@@ -21,7 +18,7 @@ interface Credentials {
   age: number;
 }
 
-const Registration = () => {
+const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [radioValue, setRadioValue] = useState(3);
 
@@ -35,17 +32,13 @@ const Registration = () => {
     console.log(errorInfo);
   };
 
-  const onRadioChange = (e: RadioChangeEvent) => {
-    setRadioValue(e.target.value);
-  };
-
   return (
-    <div className="registration">
+    <div className="login">
       <div className="authSupform">
-        <Title level={2}>Sign Up</Title>
+        <Title level={2}>Log In</Title>
       </div>
       <Form
-        name="registrationForm"
+        name="loginForm"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -63,43 +56,20 @@ const Registration = () => {
         >
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
-        <Form.Item name="gender">
-          <Radio.Group
-            onChange={onRadioChange}
-            value={radioValue}
-            buttonStyle="solid"
-            disabled={isLoading}
-          >
-            <Radio.Button value={1}>Male</Radio.Button>
-            <Radio.Button value={2}>Female</Radio.Button>
-            <Radio.Button value={3}>Other</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item name="age">
-          <label>
-            Age:&nbsp;&nbsp;&nbsp;
-            <InputNumber
-              min={12}
-              max={125}
-              name="registrationAge"
-              disabled={isLoading}
-            />
-          </label>
-        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isLoading} block>
-            Sign Up
+            Log In
           </Button>
         </Form.Item>
       </Form>
       <div className="authSubform">
         <p>
-          Have an account?&nbsp;
-          <Link to="/login">Log In</Link>
+          Don't have an account?&nbsp;
+          <Link to="/registration">Sign Up</Link>
         </p>
       </div>
     </div>
   );
 };
 
-export default Registration;
+export default Login;
