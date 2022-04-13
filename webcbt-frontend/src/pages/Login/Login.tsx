@@ -14,13 +14,10 @@ const {Title} = Typography;
 interface Credentials {
   username: string;
   password: string;
-  gender: 'Male' | 'Female' | 'Other';
-  age: number;
 }
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [radioValue, setRadioValue] = useState(3);
 
   const onFinish = (credentials: Credentials) => {
     console.log(credentials);
