@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebCbt_Backend.Data;
 using WebCbt_Backend.Models;
 
 namespace WebCbt_Backend.Controllers
@@ -24,7 +25,7 @@ namespace WebCbt_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] User user)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUser user)
         {
             if (await _userManager.FindByNameAsync(user.Login) != null)
             {
@@ -48,7 +49,7 @@ namespace WebCbt_Backend.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody] User user)
+        public async Task<IActionResult> LoginUser([FromBody] LoginUser user)
         {
             var identityUser = await _userManager.FindByNameAsync(user.Login);
 
