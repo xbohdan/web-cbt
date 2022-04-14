@@ -14,28 +14,30 @@ import './Registration.css';
 
 const {Title} = Typography;
 
+type gender = 'male' | 'female' | 'other' | 'would rather not say';
+
 interface Credentials {
   username: string;
   password: string;
-  gender: 'Male' | 'Female' | 'Other';
-  age: number;
+  gender: gender;
+  age?: number;
 }
 
 const Registration = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [radioValue, setRadioValue] = useState(3);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [radioValue, setRadioValue] = useState<gender>('would rather not say');
 
-  const onFinish = (credentials: Credentials) => {
+  const registerUser = (credentials: Credentials) => {
     console.log(credentials);
     setIsLoading(true);
   };
 
   // @ts-ignore
-  const onFinishFailed = (errorInfo) => {
+  const displayErrors = (errorInfo) => {
     console.log(errorInfo);
   };
 
-  const onRadioChange = (e: RadioChangeEvent) => {
+  const setGender = (e: RadioChangeEvent) => {
     setRadioValue(e.target.value);
   };
 
@@ -46,8 +48,8 @@ const Registration = () => {
       </div>
       <Form
         name="registrationForm"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinish={registerUser}
+        onFinishFailed={displayErrors}
         autoComplete="off"
         layout="horizontal"
       >
@@ -65,14 +67,18 @@ const Registration = () => {
         </Form.Item>
         <Form.Item name="gender">
           <Radio.Group
-            onChange={onRadioChange}
+            onChange={setGender}
+            defaultValue="would rather not say"
             value={radioValue}
             buttonStyle="solid"
             disabled={isLoading}
           >
-            <Radio.Button value={1}>Male</Radio.Button>
-            <Radio.Button value={2}>Female</Radio.Button>
-            <Radio.Button value={3}>Other</Radio.Button>
+            <Radio.Button value="male">Male</Radio.Button>
+            <Radio.Button value="female">Female</Radio.Button>
+            <Radio.Button value="other">Other</Radio.Button>
+            <Radio.Button value="would rather not say">
+              Would rather not say
+            </Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item name="age">
