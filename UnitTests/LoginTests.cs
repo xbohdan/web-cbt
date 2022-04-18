@@ -3,6 +3,9 @@ using WebCbt_Backend.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WebCbt_Backend.Models;
 using Moq;
 
@@ -21,7 +24,21 @@ namespace UnitTests
                 Login = "usrlgn",
                 Password = "teiormer"
             };
-            var mockUserManager = new Mock<UserManager<IdentityUser>>();
+            // user manager constructor elements:
+            var usrStore = new Mock<IUserStore<IdentityUser>>();
+            var paswdh = new Mock<IPasswordHasher<IdentityUser>>(); 
+            IList<IUserValidator<IdentityUser>> userValidators = new List<IUserValidator<IdentityUser>>
+            {
+                new UserValidator<IdentityUser>()
+            };
+            IList<IPasswordValidator<IdentityUser>> passwordValidators = new List<IPasswordValidator<IdentityUser>>
+            {
+                new PasswordValidator<IdentityUser>()
+            };
+
+            var mockUserManager = 
+                new Mock<UserManager<IdentityUser>>(usrStore.Object, null, paswdh.Object, 
+                userValidators, passwordValidators, null, null, null, null );
             var mockConfiguration = new Mock<IConfiguration>();
             var controller = new UsersController(mockConfiguration.Object, mockUserManager.Object);
 
@@ -30,8 +47,8 @@ namespace UnitTests
             var response = controller.LoginUser(mockExistingUser);
 
             // Assert
-
-            Assert.AreEqual(response.Result, StatusCodes.Status200OK);
+            UnauthorizedResult expected = new UnauthorizedResult();
+            Assert.AreEqual(response.Result.GetType(), expected.GetType());
 
         }
 
@@ -45,7 +62,22 @@ namespace UnitTests
                 Login = "usrlgn",
                 Password = "teiormer",
             };
-            var mockUserManager = new Mock<UserManager<IdentityUser>>();
+
+            // user manager constructor elements:
+            var usrStore = new Mock<IUserStore<IdentityUser>>();
+            var paswdh = new Mock<IPasswordHasher<IdentityUser>>();
+            IList<IUserValidator<IdentityUser>> userValidators = new List<IUserValidator<IdentityUser>>
+            {
+                new UserValidator<IdentityUser>()
+            };
+            IList<IPasswordValidator<IdentityUser>> passwordValidators = new List<IPasswordValidator<IdentityUser>>
+            {
+                new PasswordValidator<IdentityUser>()
+            };
+
+            var mockUserManager =
+                new Mock<UserManager<IdentityUser>>(usrStore.Object, null, paswdh.Object,
+                userValidators, passwordValidators, null, null, null, null);
             var mockConfiguration = new Mock<IConfiguration>();
             var controller = new UsersController(mockConfiguration.Object, mockUserManager.Object);
 
@@ -54,8 +86,8 @@ namespace UnitTests
             var response = controller.LoginUser(mockNonExistingUser);
 
             // Assert
-
-            Assert.AreEqual(response.Result, StatusCodes.Status401Unauthorized);
+            UnauthorizedResult expected = new UnauthorizedResult();
+            Assert.AreEqual(response.Result.GetType(), expected.GetType());
 
         }
     }
