@@ -10,13 +10,19 @@ services:
     ports:
       - 7198:80
     environment:                             # environ variables
-      DB_URL: mongodb://db/webcbt            # value should be database connection string
+      DB_URL: mariadb://db/webcbt            # value should be database connection string
   db:
-    image: mongo:4.0-xenial
+    image: mysql:8
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=r00t_p@ssw0rd
+      - MYSQL_PASSWORD=An0thrS3crt
+      - MYSQL_USER=admin_user
+      - MYSQL_DATABASE=webcbt_db
     ports: 
-      - 27017:27017                          # default port for mongodb
+      - 3306:3306                          # default port for mariadb
     volumes: 
-      - webcbt:/data/db
+      - ./data:/var/lib/mysql
 
 volumes:
   webcbt:
