@@ -389,5 +389,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # localdb
-data
-WebCbt-Database
+./data
+./WebCbt-Database
