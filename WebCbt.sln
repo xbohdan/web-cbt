@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCbt-Backend", "WebCbt-Backend\WebCbt-Backend.csproj", "{3AB6508E-E25B-426A-B45D-1855F7C638F0}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "WebCbt-Database", "WebCbt-Database\WebCbt-Database.sqlproj", "{F95495C1-20FF-408C-B94F-9CB23B6BD95C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{307C9505-FA72-4A98-A46E-082975E9D809}"
 EndProject
 Global
