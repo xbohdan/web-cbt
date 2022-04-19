@@ -1,53 +1,25 @@
 import React from 'react';
+import {Routes, Route} from 'react-router-dom';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import Layout from './components/Layout/Layout';
+import Registration from './pages/Registration/Registration';
+import Login from './pages/Login/Login';
 
 import './App.css';
+import 'antd/dist/antd.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Layout>
+        <Header />
+        <Routes>
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+        <Footer />
+      </Layout>
     </div>
   );
 }

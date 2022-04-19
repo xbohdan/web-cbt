@@ -1,0 +1,12 @@
+.grid {
+  display: grid;
+  height: 100vh;
+  align-items: center;
+  gap: 1rem;
+  grid-template-areas:
+    '. header .'
+    '. content .'
+    '. footer .';
+  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-rows: 1fr 10fr 1fr;
+}

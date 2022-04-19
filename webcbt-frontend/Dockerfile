@@ -4,4 +4,6 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./
 RUN npm i
-CMD ["npm", "run", "start"]
+RUN npm run build
+RUN npm i -g serve
+CMD ["serve", "-s", "build"]

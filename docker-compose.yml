@@ -3,20 +3,29 @@ version: "3.8"
 services:
   web:
     build: ./webcbt-frontend
-    ports: 
+    ports:
       - 3000:3000
   api:
     build: ./WebCbt-Backend
     ports:
       - 7198:80
     environment:                             # environ variables
-      DB_URL: mongodb://db/webcbt            # value should be database connection string
+      DB_URL: mariadb://db/webcbt            # value should be database connection string
   db:
-    image: mongo:4.0-xenial
-    ports: 
-      - 27017:27017                          # default port for mongodb
-    volumes: 
-      - webcbt:/data/db
-
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=r00t
+      - POSTGRES_USER=rootuser
+      - POSTGRES_DB=webcbt_db
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/db:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 volumes:
   webcbt:
