@@ -3,7 +3,7 @@ version: "3.8"
 services:
   web:
     build: ./webcbt-frontend
-    ports: 
+    ports:
       - 3000:3000
   api:
     build: ./WebCbt-Backend
@@ -12,17 +12,20 @@ services:
     environment:                             # environ variables
       DB_URL: mariadb://db/webcbt            # value should be database connection string
   db:
-    image: mysql:8
     restart: always
+    image: postgres
     environment:
-      - MYSQL_ROOT_PASSWORD=r00t_p@ssw0rd
-      - MYSQL_PASSWORD=An0thrS3crt
-      - MYSQL_USER=admin_user
-      - MYSQL_DATABASE=webcbt_db
-    ports: 
-      - 3306:3306                          # default port for mariadb
-    volumes: 
-      - ./data:/var/lib/mysql
-
+      - POSTGRES_PASSWORD=r00t
+      - POSTGRES_USER=rootuser
+      - POSTGRES_DB=webcbt_db
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/db:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 volumes:
   webcbt:
