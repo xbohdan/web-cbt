@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
     x.UseSqlServer(builder.Configuration["DefaultConnection"]));
 
+builder.Services.AddDbContext<WebCbtDatabaseContext>(x =>
+    x.UseSqlServer(builder.Configuration["DefaultConnection"]));
+
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

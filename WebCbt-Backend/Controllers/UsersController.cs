@@ -16,44 +16,59 @@ namespace WebCbt_Backend.Controllers
     {
         private readonly IConfiguration _configuration;
 
+        private readonly WebCbtDatabaseContext _context;
+
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UsersController(IConfiguration configuration, UserManager<IdentityUser> userManager)
+        public UsersController(IConfiguration configuration, WebCbtDatabaseContext context, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
+            _context = context;
             _userManager = userManager;
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUser user)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
-            if (await _userManager.FindByNameAsync(user.Login) != null)
+            if (await _userManager.FindByNameAsync(registerUser.Login) != null)
             {
                 return Conflict();
             }
 
             var identityUser = new IdentityUser
             {
-                UserName = user.Login,
+                UserName = registerUser.Login,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            var result = await _userManager.CreateAsync(identityUser, user.Password);
+            var result = await _userManager.CreateAsync(identityUser, registerUser.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest();
             }
 
+            var user = new User
+            {
+                UserId = identityUser.Id,
+                Age = registerUser.Age,
+                Gender = registerUser.Gender,
+                UserStatus = 0,
+                Banned = false
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
             return Ok();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUser user)
+        public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
-            var identityUser = await _userManager.FindByNameAsync(user.Login);
+            var identityUser = await _userManager.FindByNameAsync(loginUser.Login);
 
-            if (identityUser == null || !await _userManager.CheckPasswordAsync(identityUser, user.Password))
+            if (identityUser == null || !await _userManager.CheckPasswordAsync(identityUser, loginUser.Password))
             {
                 return Unauthorized();
             }
