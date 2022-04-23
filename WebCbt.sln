@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCbt-Backend", "WebCbt-Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{307C9505-FA72-4A98-A46E-082975E9D809}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "WebCbt-Database", "WebCbt-Database\WebCbt-Database.sqlproj", "{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +21,6 @@ Global
 		{307C9505-FA72-4A98-A46E-082975E9D809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{307C9505-FA72-4A98-A46E-082975E9D809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{307C9505-FA72-4A98-A46E-082975E9D809}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDA8F0E7-59B7-448E-AE0D-D511B3976D4E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
