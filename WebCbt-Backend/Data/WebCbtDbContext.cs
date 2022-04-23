@@ -6,13 +6,13 @@ using WebCbt_Backend.Models;
 
 namespace WebCbt_Backend.Data
 {
-    public partial class WebCbtDatabaseContext : DbContext
+    public partial class WebCbtDbContext : DbContext
     {
-        public WebCbtDatabaseContext()
+        public WebCbtDbContext()
         {
         }
 
-        public WebCbtDatabaseContext(DbContextOptions<WebCbtDatabaseContext> options)
+        public WebCbtDbContext(DbContextOptions<WebCbtDbContext> options)
             : base(options)
         {
         }

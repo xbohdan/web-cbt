@@ -16,11 +16,11 @@ namespace WebCbt_Backend.Controllers
     {
         private readonly IConfiguration _configuration;
 
-        private readonly WebCbtDatabaseContext _context;
+        private readonly WebCbtDbContext _context;
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UsersController(IConfiguration configuration, WebCbtDatabaseContext context, UserManager<IdentityUser> userManager)
+        public UsersController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
             _context = context;
