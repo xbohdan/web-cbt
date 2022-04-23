@@ -24,7 +24,7 @@ namespace WebCbt_Backend.Migrations.WebCbt
 
             modelBuilder.Entity("WebCbt_Backend.Models.User", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("text");
 
                     b.Property<int?>("Age")
@@ -35,13 +35,16 @@ namespace WebCbt_Backend.Migrations.WebCbt
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("UserStatus")
                         .HasColumnType("integer");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });

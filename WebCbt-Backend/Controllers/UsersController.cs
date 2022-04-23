@@ -50,7 +50,7 @@ namespace WebCbt_Backend.Controllers
 
             var user = new User
             {
-                UserId = identityUser.Id,
+                Id = identityUser.Id,
                 Age = registerUser.Age,
                 Gender = registerUser.Gender,
                 UserStatus = 0,

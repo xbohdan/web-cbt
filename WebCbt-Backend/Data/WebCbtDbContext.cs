@@ -31,7 +31,7 @@ namespace WebCbt_Backend.Data
         {
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Gender).HasMaxLength(25);
+                entity.Property(e => e.Gender).HasMaxLength(20);
             });
 
             OnModelCreatingPartial(modelBuilder);
