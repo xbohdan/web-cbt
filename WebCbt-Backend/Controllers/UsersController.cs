@@ -95,7 +95,10 @@ namespace WebCbt_Backend.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 signingCredentials: signingCredentials);
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            return Ok(new
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token)
+            });
         }
     }
 }
