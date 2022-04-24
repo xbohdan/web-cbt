@@ -10,7 +10,7 @@ using WebCbt_Backend.Models;
 
 namespace WebCbt_Backend.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
