@@ -5,15 +5,19 @@ import './index.css';
 import {Provider} from 'react-redux';
 
 import {BrowserRouter as Router} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
 
 import App from './App';
-import {store} from './app/store';
+import {store} from './store/store';
 import * as serviceWorker from './serviceWorker';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
+        <ToastContainer className="toast" autoClose={4000} limit={3} />
         <App />
       </Router>
     </Provider>
