@@ -44,8 +44,10 @@ const Registration = () => {
       // Send request (or return mocked response in development mode)
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
+        // Throw an error to see error handling
+        // throw {status: 400};
       } else {
-        await register(registrationRequest);
+        await register(registrationRequest).unwrap();
       }
 
       // Display notification about successful registration

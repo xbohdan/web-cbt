@@ -15,6 +15,8 @@ const handleLoginErrors = (
     ]);
   } else if (err.status === 403) {
     toast.error('Access forbidden');
+  } else if (err.status === 404) {
+    toast.error('404: Not found');
   } else if (err.status === 503) {
     toast.error('Server is currently down');
   } else if ('error' in err) {
