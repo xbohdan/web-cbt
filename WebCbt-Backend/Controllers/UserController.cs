@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -27,6 +28,7 @@ namespace WebCbt_Backend.Controllers
             _userManager = userManager;
         }
 
+        // POST: /user
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
@@ -63,6 +65,14 @@ namespace WebCbt_Backend.Controllers
             return Ok();
         }
 
+        // GET: /user
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
+        // POST: /user/login
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
         {

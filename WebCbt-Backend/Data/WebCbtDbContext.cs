@@ -23,7 +23,7 @@ namespace WebCbt_Backend.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=DefaultConnection");
+                optionsBuilder.UseNpgsql("Name=ConnectionStrings:WebCbt");
             }
         }
 
