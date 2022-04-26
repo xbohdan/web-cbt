@@ -4,7 +4,7 @@ CREATE SEQUENCE "Users_UserId_seq" INCREMENT  MINVALUE  MAXVALUE  CACHE ;
 
 CREATE TABLE "public"."Users" (
     "Id" text NOT NULL,
-    "UserId" integer DEFAULT nextval('"Users_UserId_seq"') NOT NULL,
+    "UserId" integer GENERATED ALWAYS AS IDENTITY,
     "Age" integer,
     "Gender" character varying(20) NOT NULL,
     "UserStatus" integer NOT NULL,
