@@ -55,9 +55,10 @@ namespace UnitTests
             // Arrange
             var mockUser = new RegisterUser()
             {
-                Login = "usrlgn",
-                Password = "teiormer",
-                Gender = "other"
+                Login = "nikita555",
+                Password = "sisKa_5",
+                Gender = "Male",
+                Age = 19
             };
             var userStore = new Mock<IUserStore<IdentityUser>>();
             var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
