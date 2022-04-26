@@ -30,7 +30,7 @@ namespace WebCbt_Backend.Controllers
 
         // POST: /user
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
+        public async Task<ActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
             if (await _userManager.FindByNameAsync(registerUser.Login) != null)
             {
@@ -74,7 +74,7 @@ namespace WebCbt_Backend.Controllers
 
         // POST: /user/login
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
+        public async Task<ActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
             var identityUser = await _userManager.FindByNameAsync(loginUser.Login);
 
@@ -86,7 +86,21 @@ namespace WebCbt_Backend.Controllers
             return ProvideToken(identityUser);
         }
 
-        private IActionResult ProvideToken(IdentityUser identityUser)
+        // GET: /user/{userId}
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<User>> GetUser(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        private ActionResult ProvideToken(IdentityUser identityUser)
         {
             var claims = new List<Claim>
             {
