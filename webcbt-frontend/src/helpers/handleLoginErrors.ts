@@ -6,7 +6,7 @@ const handleLoginErrors = (
   err: FetchBaseQueryError,
   form: FormInstance<any>,
 ) => {
-  if (err.status === 400) {
+  if (err.status === 401) {
     form.setFields([
       {
         name: 'password',
