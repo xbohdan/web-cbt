@@ -36,7 +36,7 @@ const Login = () => {
 
       // Prepare user object from successful response
       let user: User = {
-        username: formData.username,
+        login: formData.login,
         accessToken: loginResponse.accessToken,
       };
 
@@ -44,9 +44,9 @@ const Login = () => {
       dispatch(setUser(user));
 
       // Set user in localStorage (to keep user logged in after page refresh)
-      localStorage.setItem('USERNAME', formData.username);
+      localStorage.setItem('USERNAME', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
-      
+
       // Display notification about successful login
       toast.success('Logged in!');
 
@@ -72,6 +72,7 @@ const Login = () => {
         <Title level={2}>Log In</Title>
       </div>
       <Form
+        form={form}
         name="loginForm"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -79,7 +80,7 @@ const Login = () => {
         layout="horizontal"
       >
         <Form.Item
-          name="username"
+          name="login"
           rules={[{required: true, message: 'Username is required'}]}
         >
           <Input placeholder="Username" disabled={isLoading} />
