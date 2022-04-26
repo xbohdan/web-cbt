@@ -6,7 +6,7 @@ const handleRegistrationErrors = (
   err: FetchBaseQueryError,
   form: FormInstance<any>,
 ) => {
-  if (err.status === 400) {
+  if (err.status === 409) {
     form.setFields([
       {
         name: 'login',
