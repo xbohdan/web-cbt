@@ -1,3 +1,4 @@
+import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import React, {useState} from 'react';
 import {
   Form,
@@ -8,33 +9,64 @@ import {
   Button,
   RadioChangeEvent,
 } from 'antd';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 import './Registration.css';
+import {toast} from 'react-toastify';
+import {isDev} from '../../config';
+import handleRegistrationErrors from '../../helpers/handleRegistrationError';
+import returnDataWithDelay from '../../helpers/returnDataWithDelay';
+import validatePassword from '../../helpers/validatePassword';
+import {useRegistrationMutation} from '../../store/services/auth';
+import {RegistrationRequest, Gender, RegistrationForm} from '../../types/User';
 
 const {Title} = Typography;
 
-type gender = 'male' | 'female' | 'other' | 'would rather not say';
-
-interface Credentials {
-  username: string;
-  password: string;
-  gender: gender;
-  age?: number;
-}
-
 const Registration = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [radioValue, setRadioValue] = useState<gender>('would rather not say');
+  const [form] = Form.useForm();
+  const [radioValue, setRadioValue] = useState<Gender>('would rather not say');
 
-  const registerUser = (credentials: Credentials) => {
-    console.log(credentials);
-    setIsLoading(true);
+  const [register, {isLoading}] = useRegistrationMutation();
+
+  const navigate = useNavigate();
+
+  const registerUser = async (formData: RegistrationForm) => {
+    try {
+      // Prepare request object
+      if (!formData.age) delete formData.age;
+      else formData.age = parseInt(formData.age as string);
+      let registrationRequest: RegistrationRequest = {
+        ...formData,
+        userStatus: 0,
+        banned: false,
+      };
+
+      // Send request (or return mocked response in development mode)
+      if (isDev) {
+        await returnDataWithDelay(200, 'fast 3G');
+        // Throw an error to see error handling
+        // throw {status: 400};
+      } else {
+        await register(registrationRequest).unwrap();
+      }
+
+      // Display notification about successful registration
+      toast.success('Created a new account!');
+
+      // Redirect user to the login page, if the response was ok
+      navigate('/login');
+    } catch (err) {
+      if ('status' in err) {
+        handleRegistrationErrors(err as FetchBaseQueryError, form);
+      } else {
+        toast.error('Unknown error. Please try later');
+      }
+    }
   };
 
   // @ts-ignore
   const displayErrors = (errorInfo) => {
-    console.log(errorInfo);
+    console.error(errorInfo);
   };
 
   const setGender = (e: RadioChangeEvent) => {
@@ -47,28 +79,38 @@ const Registration = () => {
         <Title level={2}>Sign Up</Title>
       </div>
       <Form
+        form={form}
         name="registrationForm"
         onFinish={registerUser}
         onFinishFailed={displayErrors}
+        initialValues={{
+          gender: 'would rather not say',
+        }}
         autoComplete="off"
         layout="horizontal"
       >
         <Form.Item
-          name="username"
+          name="login"
           rules={[{required: true, message: 'Username is required'}]}
         >
           <Input placeholder="Username" disabled={isLoading} />
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{required: true, message: 'Password is required'}]}
+          rules={[
+            {required: true, message: 'Password is required'},
+            () => ({
+              validator(_, password: string) {
+                return validatePassword(password);
+              },
+            }),
+          ]}
         >
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
         <Form.Item name="gender">
           <Radio.Group
             onChange={setGender}
-            defaultValue="would rather not say"
             value={radioValue}
             buttonStyle="solid"
             disabled={isLoading}

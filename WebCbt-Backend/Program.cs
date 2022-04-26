@@ -10,7 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
-    x.UseSqlServer(builder.Configuration["DefaultConnection"]));
+    x.UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"]));
+
+builder.Services.AddDbContext<WebCbtDbContext>(x =>
+    x.UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"]));
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();

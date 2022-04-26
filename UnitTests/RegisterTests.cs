@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebCbt_Backend.Models;
 using Moq;
+using WebCbt_Backend.Data;
 
 namespace UnitTests
 {
     [TestClass]
     public class RegisterTests
     {
-        //[TestMethod]
+        [TestMethod]
         public void DefaultRegistration()
         {
             // Arrange
@@ -21,40 +22,34 @@ namespace UnitTests
             {
                 Login = "usrlgn",
                 Password = "teiormer",
-                Age = 94
+                Gender = "other"
             };
-
-            // user manager constructor elements:
-            var usrStore = new Mock<IUserStore<IdentityUser>>();
-            var paswdh = new Mock<IPasswordHasher<IdentityUser>>();
-            IList<IUserValidator<IdentityUser>> userValidators = new List<IUserValidator<IdentityUser>>
+            var userStore = new Mock<IUserStore<IdentityUser>>();
+            var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
+            var userValidators = new List<IUserValidator<IdentityUser>>
             {
                 new UserValidator<IdentityUser>()
             };
-            IList<IPasswordValidator<IdentityUser>> passwordValidators = new List<IPasswordValidator<IdentityUser>>
+            var passwordValidators = new List<IPasswordValidator<IdentityUser>>
             {
                 new PasswordValidator<IdentityUser>()
             };
-
-            var mockUserManager =
-                new Mock<UserManager<IdentityUser>>(usrStore.Object, null, paswdh.Object,
-                userValidators, passwordValidators, null, null, null, null);
             var mockConfiguration = new Mock<IConfiguration>();
-            var controller = new UsersController(mockConfiguration.Object, mockUserManager.Object);
-
+            var mockContext = new Mock<WebCbtDbContext>();
+            var mockUserManager =
+                new Mock<UserManager<IdentityUser>>(userStore.Object, null, passwordHasher.Object,
+                userValidators, passwordValidators, null, null, null, null);
+            var controller = new UserController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
 
             // Act
-
-            var response = controller.RegisterUser(mockUser);
+            var actual = controller.RegisterUser(mockUser);
 
             // Assert
-
-            OkResult okResult = new OkResult();
-
-            Assert.AreEqual(response.Result.GetType(), okResult.GetType());
+            var expected = new OkResult();
+            Assert.AreEqual(expected.GetType(), actual.Result.GetType());
 
         }
-        //[TestMethod]
+        [TestMethod]
         public void RegisterExistingUser()
         {
             // Arrange
@@ -62,39 +57,35 @@ namespace UnitTests
             {
                 Login = "usrlgn",
                 Password = "teiormer",
-                Age = 94
+                Gender = "other"
             };
-
-            // user manager constructor elements:
-            var usrStore = new Mock<IUserStore<IdentityUser>>();
-            var paswdh = new Mock<IPasswordHasher<IdentityUser>>();
-            IList<IUserValidator<IdentityUser>> userValidators = new List<IUserValidator<IdentityUser>>
+            var userStore = new Mock<IUserStore<IdentityUser>>();
+            var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
+            var userValidators = new List<IUserValidator<IdentityUser>>
             {
                 new UserValidator<IdentityUser>()
             };
-            IList<IPasswordValidator<IdentityUser>> passwordValidators = new List<IPasswordValidator<IdentityUser>>
+            var passwordValidators = new List<IPasswordValidator<IdentityUser>>
             {
                 new PasswordValidator<IdentityUser>()
             };
-
-            var mockUserManager =
-                new Mock<UserManager<IdentityUser>>(usrStore.Object, null, paswdh.Object,
-                userValidators, passwordValidators, null, null, null, null);
             var mockConfiguration = new Mock<IConfiguration>();
-            var controller = new UsersController(mockConfiguration.Object, mockUserManager.Object);
-
+            var mockContext = new Mock<WebCbtDbContext>();
+            var mockUserManager =
+                new Mock<UserManager<IdentityUser>>(userStore.Object, null, passwordHasher.Object,
+                userValidators, passwordValidators, null, null, null, null);
+            var controller = new UserController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
 
             // Act
-
-            var response_1 = controller.RegisterUser(mockUser);
-            var response_2 = controller.RegisterUser(mockUser);
+            var actual1 = controller.RegisterUser(mockUser);
+            var actual2 = controller.RegisterUser(mockUser);
 
             // Assert
-            OkResult okResult = new OkResult();
-            ConflictResult conflictResult = new ConflictResult();
+            var expected1 = new OkResult();
+            var expected2 = new ConflictResult();
 
-            Assert.AreEqual(response_1.Result.GetType(), okResult.GetType());
-            Assert.AreEqual(response_2.Result.GetType(), conflictResult.GetType());
+            Assert.AreEqual(expected1.GetType(), actual1.Result.GetType());
+            Assert.AreEqual(expected2.GetType(), actual2.Result.GetType());
         }
         
 
