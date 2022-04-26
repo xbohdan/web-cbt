@@ -1,19 +1,19 @@
 export type Gender = 'male' | 'female' | 'other' | 'would rather not say';
 
 export interface User {
-  username: string;
+  login: string;
   accessToken?: string;
 }
 
 export interface RegistrationForm {
-  username: string;
+  login: string;
   password: string;
   gender: string;
   age?: number | string;
 }
 
 export interface RegistrationRequest {
-  username: string;
+  login: string;
   password: string;
   gender: string;
   age?: number | string;
@@ -22,7 +22,7 @@ export interface RegistrationRequest {
 }
 
 export interface LoginCredentials {
-  username: string;
+  login: string;
   password: string;
 }
 

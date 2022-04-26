@@ -4,7 +4,7 @@ import {User} from '../../types/User';
 // Initial state of User slice
 // Get data from localStorage or initialize with empty values
 export const initialState: User = {
-  username: localStorage.getItem('USERNAME') || '',
+  login: localStorage.getItem('USERNAME') || '',
   accessToken: localStorage.getItem('TOKEN') || undefined,
 };
 
@@ -13,7 +13,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
-      state.username = action.payload.username;
+      state.login = action.payload.login;
       state.accessToken = action.payload.accessToken;
     },
   },

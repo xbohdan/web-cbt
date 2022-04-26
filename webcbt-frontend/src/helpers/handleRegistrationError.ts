@@ -9,7 +9,7 @@ const handleRegistrationErrors = (
   if (err.status === 400) {
     form.setFieldsValue([
       {
-        name: 'username',
+        name: 'login',
         errors: ['Operation failed or User already exists'],
       },
     ]);
