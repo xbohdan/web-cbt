@@ -7,7 +7,7 @@ const handleRegistrationErrors = (
   form: FormInstance<any>,
 ) => {
   if (err.status === 400) {
-    form.setFieldsValue([
+    form.setFields([
       {
         name: 'login',
         errors: ['Operation failed or User already exists'],

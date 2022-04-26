@@ -46,7 +46,7 @@ const Login = () => {
       // Set user in localStorage (to keep user logged in after page refresh)
       localStorage.setItem('USERNAME', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
-      
+
       // Display notification about successful login
       toast.success('Logged in!');
 

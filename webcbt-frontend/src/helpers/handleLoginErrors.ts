@@ -7,7 +7,7 @@ const handleLoginErrors = (
   form: FormInstance<any>,
 ) => {
   if (err.status === 400) {
-    form.setFieldsValue([
+    form.setFields([
       {
         name: 'password',
         errors: ['Invalid username/password supplied'],
