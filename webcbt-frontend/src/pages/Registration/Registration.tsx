@@ -79,6 +79,7 @@ const Registration = () => {
         <Title level={2}>Sign Up</Title>
       </div>
       <Form
+        form={form}
         name="registrationForm"
         onFinish={registerUser}
         onFinishFailed={displayErrors}
@@ -89,7 +90,7 @@ const Registration = () => {
         layout="horizontal"
       >
         <Form.Item
-          name="username"
+          name="login"
           rules={[{required: true, message: 'Username is required'}]}
         >
           <Input placeholder="Username" disabled={isLoading} />
