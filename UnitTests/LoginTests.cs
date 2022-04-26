@@ -39,7 +39,7 @@ namespace UnitTests
             var mockUserManager =
                 new Mock<UserManager<IdentityUser>>(userStore.Object, null, passwordHasher.Object,
                 userValidators, passwordValidators, null, null, null, null);
-            var controller = new UsersController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
+            var controller = new UserController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
 
             // Act
             var response = controller.LoginUser(mockExistingUser);
@@ -74,7 +74,7 @@ namespace UnitTests
             var mockUserManager =
                 new Mock<UserManager<IdentityUser>>(userStore.Object, null, passwordHasher.Object,
                 userValidators, passwordValidators, null, null, null, null);
-            var controller = new UsersController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
+            var controller = new UserController(mockConfiguration.Object, mockContext.Object, mockUserManager.Object);
 
             // Act
             var actual = controller.LoginUser(mockExistingUser);

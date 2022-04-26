@@ -10,9 +10,9 @@ using WebCbt_Backend.Models;
 
 namespace WebCbt_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
@@ -20,7 +20,7 @@ namespace WebCbt_Backend.Controllers
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UsersController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
+        public UserController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
             _context = context;
