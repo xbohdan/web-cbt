@@ -15,14 +15,15 @@ namespace UnitTests
     //[TestClass]
     public class LoginTests
     {
-        //[TestMethod]
+        [TestMethod]
         public void Login_ExistingUser()
         {
             // Arrange
             var mockExistingUser = new LoginUser
             {
-                Login = "usrlgn",
-                Password = "teiormer"
+                Login = "nikita555",
+                Password = "sisKa_5"
+
             };
             var userStore = new Mock<IUserStore<IdentityUser>>();
             var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
@@ -50,14 +51,14 @@ namespace UnitTests
 
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void Login_NonExistingUser()
         {
             // Arrange
             var mockExistingUser = new LoginUser
             {
-                Login = "usrlgn",
-                Password = "teiormer"
+                Login = "nonexisting_user",
+                Password = "nonexisting_password"
             };
             var userStore = new Mock<IUserStore<IdentityUser>>();
             var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
