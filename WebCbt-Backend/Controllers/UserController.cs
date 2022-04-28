@@ -37,9 +37,17 @@ namespace WebCbt_Backend.Controllers
                 return Conflict();
             }
 
+            var index = registerUser.Login.IndexOf("@");
+
+            if (index == -1)
+            {
+                return BadRequest();
+            }
+
             var identityUser = new IdentityUser
             {
-                UserName = registerUser.Login,
+                UserName = registerUser.Login[..index],
+                Email = registerUser.Login,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
@@ -69,7 +77,7 @@ namespace WebCbt_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return Ok(await _context.Users.ToListAsync());
         }
 
         // POST: /user/login
@@ -83,15 +91,17 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            return ProvideToken(identityUser);
-        }
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
 
-        private IActionResult ProvideToken(IdentityUser identityUser)
-        {
+            if (user == null || user.IdNavigation.Email == null)
+            {
+                return StatusCode(500);
+            }
+
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, identityUser.Id)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.IdNavigation.Email)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -122,7 +132,7 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
         // PUT: /user/{userId}
@@ -152,7 +162,7 @@ namespace WebCbt_Backend.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(user);
         }
 
         private bool UserExists(int userId)
