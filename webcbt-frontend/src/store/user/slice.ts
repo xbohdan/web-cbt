@@ -4,7 +4,7 @@ import {User} from '../../types/User';
 // Initial state of User slice
 // Get data from localStorage or initialize with empty values
 export const initialState: User = {
-  login: localStorage.getItem('USERNAME') || '',
+  login: localStorage.getItem('LOGIN') || '',
   accessToken: localStorage.getItem('TOKEN') || undefined,
 };
 
