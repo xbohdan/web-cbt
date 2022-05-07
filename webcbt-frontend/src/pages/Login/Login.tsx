@@ -44,7 +44,7 @@ const Login = () => {
       dispatch(setUser(user));
 
       // Set user in localStorage (to keep user logged in after page refresh)
-      localStorage.setItem('USERNAME', formData.login);
+      localStorage.setItem('LOGIN', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
 
       // Display notification about successful login
@@ -81,9 +81,12 @@ const Login = () => {
       >
         <Form.Item
           name="login"
-          rules={[{required: true, message: 'Username is required'}]}
+          rules={[
+            {required: true, message: 'Email is required'},
+            {type: 'email', message: 'Email is not valid'},
+          ]}
         >
-          <Input placeholder="Username" disabled={isLoading} />
+          <Input placeholder="Email" disabled={isLoading} />
         </Form.Item>
         <Form.Item
           name="password"
