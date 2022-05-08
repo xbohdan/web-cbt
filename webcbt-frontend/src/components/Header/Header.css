@@ -1,6 +1,50 @@
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 24px;
   grid-area: header;
-  text-align: left;
   text-decoration: none;
+}
+
+.headerPopover {
+  text-decoration: none;
+}
+
+.ant-popover {
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.popoverContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.popoverLogout {
+  padding: 0;
+  margin: 0;
+}
+
+.headerAvatar {
+  display: none;
+}
+
+.headerAvatar:hover {
+  cursor: pointer;
+}
+
+.headerButton {
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  .headerAvatar {
+    display: block;
+  }
+
+  .headerButton {
+    display: none;
+  }
 }
