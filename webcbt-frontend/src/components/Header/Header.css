@@ -1,10 +1,21 @@
 .header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   font-size: 24px;
   grid-area: header;
   text-decoration: none;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+}
+
+.linkToTests {
+  margin-right: 20px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 18px;
 }
 
 .headerPopover {
@@ -40,8 +51,24 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .linkToTests {
+    font-size: 24px;
+  }
+
+  .moodTestsParagraph {
+    display: none;
+  }
+
   .headerAvatar {
     display: block;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.85);
+
+    /* border: 1px solid rgba(0, 0, 0, 0.85); */
+  }
+
+  .avatarIcon {
+    font-size: 21px;
   }
 
   .headerButton {
