@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace UnitTests.Integration_Tests
 {
@@ -20,17 +21,17 @@ namespace UnitTests.Integration_Tests
         public async Task Login_ExistingUser()
         {
             // Login  == POST request
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/login");
 
             var credentials = new Dictionary<string, string>()
             {
-                {"Login", "nikita555" },
-                {"Password", "sisKa_5" }
+                {"login", "nikita555" },
+                {"password", "sisKa_5" }
             };
 
-            postRequest.Content = new FormUrlEncodedContent(credentials);
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.SendAsync(postRequest);
+            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user/login", httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -39,16 +40,17 @@ namespace UnitTests.Integration_Tests
         [TestMethod]
         public async Task Login_NonExistingUser()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/login");
-
             var credentials = new Dictionary<string, string>()
             {
-                {"Login", "non_existing_user" },
-                {"Password", "non_existing_password" }
+                {"login", "non_existing_user" },
+                {"password", "non_existing_password" }
             };
-            postRequest.Content = new FormUrlEncodedContent(credentials);
 
-            var response = await _httpClient.SendAsync(postRequest);
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user/login", httpContent);
 
             var codeResult = response.StatusCode;
 
