@@ -25,32 +25,32 @@ const MoodTests = () => {
       <div className="moodTestsBlocks">
         <MoodTestBlock
           title="Depression"
-          cover={<img alt="depression image" src={depressionImg} />}
+          cover={<img alt="depression" src={depressionImg} />}
           link="/tests/depression"
         />
         <MoodTestBlock
           title="Anxiety"
-          cover={<img alt="anxiety image" src={anxietyImg} />}
+          cover={<img alt="anxiety" src={anxietyImg} />}
           link="/tests/anxiety"
         />
         <MoodTestBlock
           title="Addictions"
-          cover={<img alt="depression image" src={addictionsImg} />}
+          cover={<img alt="addictions" src={addictionsImg} />}
           link="/tests/addictions"
         />
         <MoodTestBlock
           title="Anger"
-          cover={<img alt="depression image" src={angerImg} />}
+          cover={<img alt="anger" src={angerImg} />}
           link="/tests/anger"
         />
         <MoodTestBlock
           title="Relationships"
-          cover={<img alt="depression image" src={relationshipsImg} />}
+          cover={<img alt="relationships" src={relationshipsImg} />}
           link="/tests/relationships"
         />
         <MoodTestBlock
           title="Happiness"
-          cover={<img alt="depression image" src={happinessImg} />}
+          cover={<img alt="happiness" src={happinessImg} />}
           link="/tests/happiness"
         />
       </div>
