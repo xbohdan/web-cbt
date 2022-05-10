@@ -32,7 +32,7 @@ namespace WebCbt_Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
-            if (await _userManager.FindByNameAsync(registerUser.Login) != null)
+            if (await _userManager.FindByEmailAsync(registerUser.Login) != null)
             {
                 return Conflict();
             }
@@ -55,7 +55,7 @@ namespace WebCbt_Backend.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest();
+                return BadRequest(result.Errors.Select(x => x.Description));
             }
 
             var user = new User
@@ -84,7 +84,7 @@ namespace WebCbt_Backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
-            var identityUser = await _userManager.FindByNameAsync(loginUser.Login);
+            var identityUser = await _userManager.FindByEmailAsync(loginUser.Login);
 
             if (identityUser == null || !await _userManager.CheckPasswordAsync(identityUser, loginUser.Password))
             {
