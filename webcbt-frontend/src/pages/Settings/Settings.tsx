@@ -34,7 +34,6 @@ const Settings = () => {
           login: formData.login,
           accessToken: 'mockToken',
         };
-
         // Set user in Redux store
         dispatch(setUser(user));
 
