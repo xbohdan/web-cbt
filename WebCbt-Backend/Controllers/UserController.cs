@@ -19,12 +19,15 @@ namespace WebCbt_Backend.Controllers
 
         private readonly WebCbtDbContext _context;
 
+        private readonly NullabilityInfoContext _nullabilityInfoContext;
+
         private readonly UserManager<IdentityUser> _userManager;
 
         public UserController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
             _context = context;
+            _nullabilityInfoContext = new NullabilityInfoContext();
             _userManager = userManager;
         }
 
@@ -144,12 +147,6 @@ namespace WebCbt_Backend.Controllers
                 if (userProp != null)
                 {
                     var userValue = userProp.GetValue(user);
-
-                    if (userValue == null)
-                    {
-                        continue;
-                    }
-
                     userDtoProp.SetValue(userDto, userValue);
                 }
                 else
@@ -177,7 +174,14 @@ namespace WebCbt_Backend.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return StatusCode(500);
+            }
+
+            var aspNetUser = await _userManager.FindByIdAsync(user.Id);
+
+            if (aspNetUser == null)
+            {
+                return StatusCode(500);
             }
 
             var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
@@ -188,32 +192,60 @@ namespace WebCbt_Backend.Controllers
             {
                 var userDtoValue = userDtoProp.GetValue(userDto);
 
-                if (userDtoValue == null)
-                {
-                    continue;
-                }
-
                 var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
 
                 if (userProp != null)
                 {
+                    if (userDtoValue == null)
+                    {
+                        if (_nullabilityInfoContext.Create(userProp).WriteState != NullabilityState.Nullable)
+                        {
+                            return BadRequest();
+                        }
+                    }
+
                     userProp.SetValue(user, userDtoValue);
                 }
                 else
                 {
-                    var aspNetUser = await _userManager.FindByIdAsync(user.Id);
                     IdentityResult? result = null;
 
-                    if (userDtoProp.Name == "Login")
+                    if (userDtoValue == null)
                     {
-                        var login = userDtoValue.ToString();
-                        var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, login);
-                        result = await _userManager.ChangeEmailAsync(aspNetUser, login, token);
+                        if (userDtoProp.Name == "Password")
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
                     }
-                    else if (userDtoProp.Name == "Password")
+
+                    if (userDtoProp.Name == "Password")
                     {
                         var token = await _userManager.GeneratePasswordResetTokenAsync(aspNetUser);
                         result = await _userManager.ResetPasswordAsync(aspNetUser, token, userDtoValue.ToString());
+                    }
+                    else if (userDtoProp.Name == "Login")
+                    {
+                        var login = userDtoValue.ToString();
+                        var index = login?.IndexOf("@") ?? -1;
+
+                        if (index == -1)
+                        {
+                            return BadRequest();
+                        }
+
+                        result = await _userManager.SetUserNameAsync(aspNetUser, login?[..index]);
+
+                        if (result?.Succeeded != true)
+                        {
+                            return BadRequest(result?.Errors.Select(x => x.Description));
+                        }
+
+                        var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, login);
+                        result = await _userManager.ChangeEmailAsync(aspNetUser, login, token);
                     }
 
                     if (result?.Succeeded != true)
