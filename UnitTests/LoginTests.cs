@@ -12,7 +12,7 @@ using WebCbt_Backend.Data;
 
 namespace UnitTests
 {
-    //[TestClass]
+    [TestClass]
     public class LoginTests
     {
         //[TestMethod]
@@ -21,8 +21,8 @@ namespace UnitTests
             // Arrange
             var mockExistingUser = new LoginUser
             {
-                Login = "usrlgn",
-                Password = "teiormer"
+                Login = "nikita555",
+                Password = "sisKa_5"
             };
             var userStore = new Mock<IUserStore<IdentityUser>>();
             var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
@@ -45,7 +45,7 @@ namespace UnitTests
             var response = controller.LoginUser(mockExistingUser);
 
             // Assert
-            var expected = new UnauthorizedResult();
+            var expected = new OkResult();
             Assert.AreEqual(response.Result.GetType(), expected.GetType());
 
         }
@@ -56,8 +56,8 @@ namespace UnitTests
             // Arrange
             var mockExistingUser = new LoginUser
             {
-                Login = "usrlgn",
-                Password = "teiormer"
+                Login = "nonexisting_user",
+                Password = "nonexisting_password"
             };
             var userStore = new Mock<IUserStore<IdentityUser>>();
             var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();

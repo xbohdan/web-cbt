@@ -10,3 +10,10 @@
   grid-template-columns: 1fr 10fr 1fr;
   grid-template-rows: 1fr 10fr 1fr;
 }
+
+@media only screen and (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 20fr 1fr;
+    grid-template-rows: 1.2fr 10fr;
+  }
+}

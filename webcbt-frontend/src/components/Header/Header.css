@@ -1,6 +1,77 @@
 .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   font-size: 24px;
   grid-area: header;
-  text-align: left;
   text-decoration: none;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+}
+
+.linkToTests {
+  margin-right: 20px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 18px;
+}
+
+.headerPopover {
+  text-decoration: none;
+}
+
+.ant-popover {
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.popoverContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.popoverLogout {
+  padding: 0;
+  margin: 0;
+}
+
+.headerAvatar {
+  display: none;
+}
+
+.headerAvatar:hover {
+  cursor: pointer;
+}
+
+.headerButton {
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  .linkToTests {
+    font-size: 24px;
+  }
+
+  .moodTestsParagraph {
+    display: none;
+  }
+
+  .headerAvatar {
+    display: block;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.85);
+
+    /* border: 1px solid rgba(0, 0, 0, 0.85); */
+  }
+
+  .avatarIcon {
+    font-size: 21px;
+  }
+
+  .headerButton {
+    display: none;
+  }
 }

@@ -1,0 +1,41 @@
+.moodTestForm {
+  align-self: start;
+  margin-top: 50px;
+  grid-area: content;
+}
+
+.moodTestQuestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.questionText {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px 10px 10px 0;
+  font-size: 20px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.moodTestRate {
+  font-size: 24px;
+}
+
+.ant-rate-star-second {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.moodTestSubmit {
+  width: 100%;
+  max-width: 200px;
+  margin: 20px auto 0;
+}
+
+@media only screen and (max-width: 560px) {
+  .questionText {
+    text-align: center;
+  }
+}

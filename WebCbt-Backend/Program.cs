@@ -13,7 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
     x.UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"]));
 
 builder.Services.AddDbContext<WebCbtDbContext>(x =>
-    x.UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"]));
+    x.UseLazyLoadingProxies()
+    .UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"])); ;
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -63,3 +64,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//public partial class Program { }

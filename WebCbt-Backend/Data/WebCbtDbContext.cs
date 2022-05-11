@@ -27,7 +27,8 @@ namespace WebCbt_Backend.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Name=ConnectionStrings:WebCbt");
+                optionsBuilder
+                    .UseNpgsql("Name=ConnectionStrings:WebCbt");
             }
         }
 
