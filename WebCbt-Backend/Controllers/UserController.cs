@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using WebCbt_Backend.Data;
@@ -131,16 +132,95 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            var userDto = new UserDto();
+
+            var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+            var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
+
+            foreach (var userDtoProp in userDtoProps)
+            {
+                var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
+
+                if (userProp != null)
+                {
+                    var userValue = userProp.GetValue(user);
+
+                    if (userValue == null)
+                    {
+                        continue;
+                    }
+
+                    userDtoProp.SetValue(userDto, userValue);
+                }
+                else
+                {
+                    if (userDtoProp.Name == "Login")
+                    {
+                        userDtoProp.SetValue(userDto, user.IdNavigation.Email);
+                    }
+                }
+            }
+
+            return Ok(userDto);
         }
 
         // PUT: /user/{userId}
         [HttpPut("{userId}")]
-        public async Task<IActionResult> PutUser(int userId, User user)
+        public async Task<IActionResult> PutUser(int userId, UserDto userDto)
         {
-            if (userId != user.UserId)
+            if (userId != userDto.UserId)
             {
                 return BadRequest();
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
+            var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+            var aspNetUserProps = typeof(AspNetUser).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+
+            foreach (var userDtoProp in userDtoProps)
+            {
+                var userDtoValue = userDtoProp.GetValue(userDto);
+
+                if (userDtoValue == null)
+                {
+                    continue;
+                }
+
+                var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
+
+                if (userProp != null)
+                {
+                    userProp.SetValue(user, userDtoValue);
+                }
+                else
+                {
+                    var aspNetUser = await _userManager.FindByIdAsync(user.Id);
+                    IdentityResult? result = null;
+
+                    if (userDtoProp.Name == "Login")
+                    {
+                        var login = userDtoValue.ToString();
+                        var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, login);
+                        result = await _userManager.ChangeEmailAsync(aspNetUser, login, token);
+                    }
+                    else if (userDtoProp.Name == "Password")
+                    {
+                        var token = await _userManager.GeneratePasswordResetTokenAsync(aspNetUser);
+                        result = await _userManager.ResetPasswordAsync(aspNetUser, token, userDtoValue.ToString());
+                    }
+
+                    if (result?.Succeeded != true)
+                    {
+                        return BadRequest(result?.Errors.Select(x => x.Description));
+                    }
+                }
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -161,7 +241,7 @@ namespace WebCbt_Backend.Controllers
                 }
             }
 
-            return Ok(user);
+            return Ok();
         }
 
         private bool UserExists(int userId)
