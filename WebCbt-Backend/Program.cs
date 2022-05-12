@@ -14,10 +14,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
 
 builder.Services.AddDbContext<WebCbtDbContext>(x =>
     x.UseLazyLoadingProxies()
-    .UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"])); ;
+    .UseNpgsql(builder.Configuration["ConnectionStrings:WebCbt"]));
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddCors(x =>
+    x.AddPolicy("AllOrigins", y =>
+        y.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
@@ -34,6 +38,10 @@ builder.Services.AddAuthentication(x =>
             ValidIssuer = builder.Configuration["Jwt:Issuer"]
         };
     });
+
+builder.Services.AddAuthorization(x =>
+    x.AddPolicy("AdminOnly", y =>
+       y.RequireClaim("userStatus", "1")));
 
 builder.Services.AddRouting(x =>
     x.LowercaseUrls = true);
@@ -57,6 +65,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseCors();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -64,5 +76,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-//public partial class Program { }
