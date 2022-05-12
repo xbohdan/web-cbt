@@ -23,15 +23,12 @@ namespace WebCbt_Backend.Controllers
 
         private readonly WebCbtDbContext _dbContext;
 
-        private readonly NullabilityInfoContext _nullabilityInfoContext;
-
         private readonly UserManager<IdentityUser> _userManager;
 
         public UserController(IConfiguration configuration, WebCbtDbContext dbContext, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
             _dbContext = dbContext;
-            _nullabilityInfoContext = new NullabilityInfoContext();
             _userManager = userManager;
         }
 
@@ -40,16 +37,17 @@ namespace WebCbt_Backend.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
-            if (await _userManager.FindByEmailAsync(registerUser.Login) != null)
-            {
-                return Conflict();
-            }
-
             var index = registerUser.Login.IndexOf("@");
 
-            if (index == -1)
+            if (index == -1 || registerUser.Password == null)
             {
                 return BadRequest();
+            }
+
+            if (await _userManager.FindByEmailAsync(registerUser.Login) != null
+                || await _userManager.FindByNameAsync(registerUser.Login[..index]) != null)
+            {
+                return Conflict();
             }
 
             var identityUser = new IdentityUser
@@ -89,9 +87,39 @@ namespace WebCbt_Backend.Controllers
             var userDtos = new List<UserDto>();
             foreach (var user in await _dbContext.Users.ToListAsync())
             {
-                userDtos.Add(GenerateUserDto(user));
+                userDtos.Add(CreateUserDto(user));
             }
             return Ok(userDtos);
+        }
+
+        private static UserDto CreateUserDto(User user)
+        {
+            var userDto = new UserDto();
+
+            var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+
+            var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
+
+            foreach (var userDtoProp in userDtoProps)
+            {
+                var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
+
+                if (userProp != null)
+                {
+                    var userValue = userProp.GetValue(user);
+
+                    userDtoProp.SetValue(userDto, userValue);
+                }
+                else
+                {
+                    if (userDtoProp.Name == "Login")
+                    {
+                        userDtoProp.SetValue(userDto, user.IdNavigation.Email);
+                    }
+                }
+            }
+
+            return userDto;
         }
 
         // POST: /user/login
@@ -108,7 +136,7 @@ namespace WebCbt_Backend.Controllers
 
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
 
-            if (user == null || user.IdNavigation.Email == null)
+            if (user == null)
             {
                 return StatusCode(500);
             }
@@ -149,48 +177,13 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(GenerateUserDto(user));
-        }
-
-        private UserDto GenerateUserDto(User user)
-        {
-            var userDto = new UserDto();
-
-            var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
-
-            var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
-
-            foreach (var userDtoProp in userDtoProps)
-            {
-                var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
-
-                if (userProp != null)
-                {
-                    var userValue = userProp.GetValue(user);
-
-                    userDtoProp.SetValue(userDto, userValue);
-                }
-                else
-                {
-                    if (userDtoProp.Name == "Login")
-                    {
-                        userDtoProp.SetValue(userDto, user.IdNavigation.Email);
-                    }
-                }
-            }
-
-            return userDto;
+            return Ok(CreateUserDto(user));
         }
 
         // PUT: /user/{userId}
         [HttpPut("{userId}")]
-        public async Task<IActionResult> PutUser(int userId, UserDto userDto)
+        public async Task<IActionResult> PutUser(int userId, RegisterUser registerUser)
         {
-            if (userId != userDto.UserId)
-            {
-                return BadRequest();
-            }
-
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
@@ -205,81 +198,53 @@ namespace WebCbt_Backend.Controllers
                 return StatusCode(500);
             }
 
-            var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
-
-            var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
-
-            var aspNetUserProps = typeof(AspNetUser).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
-
-            foreach (var userDtoProp in userDtoProps)
+            if (registerUser.Password != null)
             {
-                var userDtoValue = userDtoProp.GetValue(userDto);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(aspNetUser);
 
-                var userProp = userProps.FirstOrDefault(x => x.Name == userDtoProp.Name);
+                var result = await _userManager.ResetPasswordAsync(aspNetUser, token, registerUser.Password);
 
-                if (userProp != null)
+                if (!result.Succeeded)
                 {
-                    if (userDtoValue == null)
-                    {
-                        if (_nullabilityInfoContext.Create(userProp).WriteState != NullabilityState.Nullable)
-                        {
-                            return BadRequest();
-                        }
-                    }
-
-                    userProp.SetValue(user, userDtoValue);
-                }
-                else
-                {
-                    IdentityResult? result = null;
-
-                    if (userDtoValue == null)
-                    {
-                        if (userDtoProp.Name == "Password")
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
-                    }
-
-                    if (userDtoProp.Name == "Password")
-                    {
-                        var token = await _userManager.GeneratePasswordResetTokenAsync(aspNetUser);
-
-                        result = await _userManager.ResetPasswordAsync(aspNetUser, token, userDtoValue.ToString());
-                    }
-                    else if (userDtoProp.Name == "Login")
-                    {
-                        var login = userDtoValue.ToString();
-
-                        var index = login?.IndexOf("@") ?? -1;
-
-                        if (index == -1)
-                        {
-                            return BadRequest();
-                        }
-
-                        result = await _userManager.SetUserNameAsync(aspNetUser, login?[..index]);
-
-                        if (result?.Succeeded != true)
-                        {
-                            return BadRequest(result?.Errors.Select(x => x.Description));
-                        }
-
-                        var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, login);
-
-                        result = await _userManager.ChangeEmailAsync(aspNetUser, login, token);
-                    }
-
-                    if (result?.Succeeded != true)
-                    {
-                        return BadRequest(result?.Errors.Select(x => x.Description));
-                    }
+                    return BadRequest(result.Errors.Select(x => x.Description));
                 }
             }
+
+            if (registerUser.Login != aspNetUser.Email)
+            {
+                var index = registerUser.Login.IndexOf("@");
+
+                if (index == -1)
+                {
+                    return BadRequest();
+                }
+
+                if (await _userManager.FindByEmailAsync(registerUser.Login) != null
+                    || await _userManager.FindByNameAsync(registerUser.Login[..index]) != null)
+                {
+                    return Conflict();
+                }
+
+                var result = await _userManager.SetUserNameAsync(aspNetUser, registerUser.Login[..index]);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors.Select(x => x.Description));
+                }
+
+                var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, registerUser.Login);
+
+                result = await _userManager.ChangeEmailAsync(aspNetUser, registerUser.Login, token);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors.Select(x => x.Description));
+                }
+            }
+
+            user.Age = registerUser.Age;
+
+            user.Gender = registerUser.Gender;
 
             _dbContext.Entry(user).State = EntityState.Modified;
 
