@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,26 +15,29 @@ namespace WebCbt_Backend.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
+    // [EnableCors("AllOrigins")]
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        private readonly WebCbtDbContext _context;
+        private readonly WebCbtDbContext _dbContext;
 
         private readonly NullabilityInfoContext _nullabilityInfoContext;
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
+        public UserController(IConfiguration configuration, WebCbtDbContext dbContext, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
-            _context = context;
+            _dbContext = dbContext;
             _nullabilityInfoContext = new NullabilityInfoContext();
             _userManager = userManager;
         }
 
         // POST: /user
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
             if (await _userManager.FindByEmailAsync(registerUser.Login) != null)
@@ -70,21 +75,28 @@ namespace WebCbt_Backend.Controllers
                 Banned = false
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
 
             return Ok();
         }
 
         // GET: /user
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
+            var userDtos = new List<UserDto>();
+            foreach (var user in await _dbContext.Users.ToListAsync())
+            {
+                userDtos.Add(GenerateUserDto(user));
+            }
+            return Ok(userDtos);
         }
 
         // POST: /user/login
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
             var identityUser = await _userManager.FindByEmailAsync(loginUser.Login);
@@ -94,7 +106,7 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
 
             if (user == null || user.IdNavigation.Email == null)
             {
@@ -103,8 +115,8 @@ namespace WebCbt_Backend.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.IdNavigation.Email)
+                new Claim("userId", user.UserId.ToString()),
+                new Claim("userStatus", user.UserStatus.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -120,7 +132,9 @@ namespace WebCbt_Backend.Controllers
 
             return Ok(new
             {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(token)
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                user.UserStatus,
+                user.UserId
             });
         }
 
@@ -128,16 +142,22 @@ namespace WebCbt_Backend.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<User>> GetUser(int userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
+            return Ok(GenerateUserDto(user));
+        }
+
+        private UserDto GenerateUserDto(User user)
+        {
             var userDto = new UserDto();
 
             var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+
             var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
 
             foreach (var userDtoProp in userDtoProps)
@@ -147,6 +167,7 @@ namespace WebCbt_Backend.Controllers
                 if (userProp != null)
                 {
                     var userValue = userProp.GetValue(user);
+
                     userDtoProp.SetValue(userDto, userValue);
                 }
                 else
@@ -158,7 +179,7 @@ namespace WebCbt_Backend.Controllers
                 }
             }
 
-            return Ok(userDto);
+            return userDto;
         }
 
         // PUT: /user/{userId}
@@ -170,7 +191,7 @@ namespace WebCbt_Backend.Controllers
                 return BadRequest();
             }
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
             {
@@ -185,7 +206,9 @@ namespace WebCbt_Backend.Controllers
             }
 
             var userDtoProps = typeof(UserDto).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead);
+
             var userProps = typeof(User).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
+
             var aspNetUserProps = typeof(AspNetUser).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite);
 
             foreach (var userDtoProp in userDtoProps)
@@ -225,11 +248,13 @@ namespace WebCbt_Backend.Controllers
                     if (userDtoProp.Name == "Password")
                     {
                         var token = await _userManager.GeneratePasswordResetTokenAsync(aspNetUser);
+
                         result = await _userManager.ResetPasswordAsync(aspNetUser, token, userDtoValue.ToString());
                     }
                     else if (userDtoProp.Name == "Login")
                     {
                         var login = userDtoValue.ToString();
+
                         var index = login?.IndexOf("@") ?? -1;
 
                         if (index == -1)
@@ -245,6 +270,7 @@ namespace WebCbt_Backend.Controllers
                         }
 
                         var token = await _userManager.GenerateChangeEmailTokenAsync(aspNetUser, login);
+
                         result = await _userManager.ChangeEmailAsync(aspNetUser, login, token);
                     }
 
@@ -255,11 +281,11 @@ namespace WebCbt_Backend.Controllers
                 }
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _dbContext.Entry(user).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -278,22 +304,23 @@ namespace WebCbt_Backend.Controllers
 
         private bool UserExists(int userId)
         {
-            return _context.Users.Any(x => x.UserId == userId);
+            return _dbContext.Users.Any(x => x.UserId == userId);
         }
 
         // DELETE: /user/{userId}
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            _dbContext.Users.Remove(user);
+
+            _dbContext.SaveChanges();
 
             return NoContent();
         }
