@@ -84,6 +84,11 @@ namespace WebCbt_Backend.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized();
+            }
+
             var userDtos = new List<UserDto>();
             foreach (var user in await _dbContext.Users.ToListAsync())
             {
@@ -170,6 +175,11 @@ namespace WebCbt_Backend.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<User>> GetUser(int userId)
         {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized();
+            }
+
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
@@ -184,6 +194,11 @@ namespace WebCbt_Backend.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> PutUser(int userId, RegisterUser registerUser)
         {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized();
+            }
+
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
@@ -276,6 +291,11 @@ namespace WebCbt_Backend.Controllers
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized();
+            }
+
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
