@@ -33,6 +33,8 @@ namespace WebCbt_Backend.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresEnum("gender_t", new[] { "male", "female", "other", "prefer not to say" });
+
             modelBuilder.Entity<AspNetRole>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
@@ -109,7 +111,7 @@ namespace WebCbt_Backend.Data
 
                 entity.Property(e => e.UserId).UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.Gender).HasMaxLength(20);
+                entity.Property(e => e.Gender).HasColumnType("character varying");
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithMany(p => p.Users)
