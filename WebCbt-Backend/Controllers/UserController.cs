@@ -16,7 +16,7 @@ namespace WebCbt_Backend.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    // [EnableCors("AllOrigins")]
+    [EnableCors("AllOrigins")]
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
