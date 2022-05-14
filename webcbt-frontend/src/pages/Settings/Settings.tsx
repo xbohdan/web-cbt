@@ -1,58 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Form, Typography, Input, Button} from 'antd';
 
 import './Settings.css';
-import {toast} from 'react-toastify';
-import {isDev} from '../../config';
-import {setUser} from '../../store/user/slice';
-import returnDataWithDelay from '../../helpers/returnDataWithDelay';
-import useAppDispatch from '../../hooks/useAppDispatch';
-import {ManageAccountForm, ManageAccountResponse, User} from '../../types/User';
-import useAppSelector from '../../hooks/useAppSelector';
-import selectLogin from '../../store/user/selectors/selectLogin';
+import useSettings from '../../hooks/useSettings';
 
 const {Title} = Typography;
 
 const Settings = () => {
   const [form] = Form.useForm();
-  const [isLoading, setLoadingState] = useState(false);
-  const dispatch = useAppDispatch();
-  const userLogin = useAppSelector(selectLogin);
-  const [isEditing, setEditingState] = useState(false);
-
-  const onFinish = async (formData: ManageAccountForm) => {
-    try {
-      setLoadingState(true);
-      let manageAccountResponse: ManageAccountResponse;
-      if (!formData.login) formData.login = userLogin;
-      if (isDev) {
-        manageAccountResponse = await returnDataWithDelay(
-          {accessToken: 'mockToken'},
-          'fast 3G',
-        );
-        let user: User = {
-          login: formData.login,
-          accessToken: 'mockToken',
-        };
-        // Set user in Redux store
-        dispatch(setUser(user));
-
-        localStorage.setItem('LOGIN', formData.login);
-        localStorage.setItem('TOKEN', manageAccountResponse.accessToken);
-      }
-
-      toast.success('Account settings changed!');
-      setLoadingState(false);
-      setEditingState(false);
-    } catch (err) {
-      /*handling errors*/
-    }
-  };
-
-  // @ts-ignore
-  const onFinishFailed = (errorInfo) => {
-    console.error(errorInfo);
-  };
+  const {
+    isLoading,
+    isEditing,
+    setEditingState,
+    userLogin,
+    onSubmit,
+    onSubmitFailed,
+  } = useSettings();
 
   return (
     <div className="settings">
@@ -62,8 +25,8 @@ const Settings = () => {
       <Form
         form={form}
         name="settingsForm"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinish={onSubmit}
+        onFinishFailed={onSubmitFailed}
         autoComplete="off"
         layout="horizontal"
       >
@@ -71,7 +34,7 @@ const Settings = () => {
           name="login"
           rules={[{type: 'email', message: 'Email is not valid'}]}
         >
-          <Input placeholder={userLogin} disabled={isLoading || !isEditing} />
+          <Input defaultValue={userLogin} disabled={isLoading || !isEditing} />
         </Form.Item>
         <Form.Item name="password">
           <Input.Password
@@ -94,7 +57,7 @@ const Settings = () => {
           </datalist>
         </Form.Item>
         <Form.Item name="age">
-          <Input placeholder="25" disabled={isLoading || !isEditing} />
+          <Input defaultValue="25" disabled={isLoading || !isEditing} />
         </Form.Item>
         <Form.Item hidden={!isEditing}>
           <Button type="primary" htmlType="submit" loading={isLoading} block>
