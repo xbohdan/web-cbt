@@ -40,4 +40,3 @@ export interface ManageAccountForm {
 export interface ManageAccountResponse {
   accessToken: string;
 }
-
