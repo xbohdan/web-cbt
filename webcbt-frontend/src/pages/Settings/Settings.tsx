@@ -44,7 +44,7 @@ const Settings = () => {
       toast.success('Account settings changed!');
       setLoadingState(false);
       setEditingState(false);
-    }catch (err){
+    } catch (err) {
       /*handling errors*/
     }
   };
@@ -54,7 +54,7 @@ const Settings = () => {
     console.error(errorInfo);
   };
 
-  return(
+  return (
     <div className="settings">
       <div className="authSupform">
         <Title level={2}>Manage Account</Title>
@@ -69,31 +69,31 @@ const Settings = () => {
       >
         <Form.Item
           name="login"
-          rules={[
-            {type: 'email', message: 'Email is not valid'},
-          ]}
+          rules={[{type: 'email', message: 'Email is not valid'}]}
         >
           <Input placeholder={userLogin} disabled={isLoading || !isEditing} />
         </Form.Item>
-        <Form.Item
-          name="password"
-        >
-          <Input.Password placeholder="Password" disabled={isLoading || !isEditing} />
+        <Form.Item name="password">
+          <Input.Password
+            placeholder="Password"
+            disabled={isLoading || !isEditing}
+          />
         </Form.Item>
-        <Form.Item
-          name="gender"
-        >
-          <Input list="browsers" disabled={isLoading || !isEditing} placeholder="would rather not say" readOnly/>
+        <Form.Item name="gender">
+          <Input
+            list="browsers"
+            disabled={isLoading || !isEditing}
+            placeholder="would rather not say"
+            readOnly
+          />
           <datalist id="browsers">
-            <option value="male"/>
-            <option value="female"/>
-            <option value="other"/>
-            <option value="would rather not say"/>
+            <option value="male" />
+            <option value="female" />
+            <option value="other" />
+            <option value="would rather not say" />
           </datalist>
         </Form.Item>
-        <Form.Item
-          name="age"
-        >
+        <Form.Item name="age">
           <Input placeholder="25" disabled={isLoading || !isEditing} />
         </Form.Item>
         <Form.Item hidden={!isEditing}>
