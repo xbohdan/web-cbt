@@ -24,6 +24,7 @@ import useAppSelector from './hooks/useAppSelector';
 import MoodTests from './pages/MoodTests/MoodTests';
 import Registration from './pages/Registration/Registration';
 import Login from './pages/Login/Login';
+import Settings from './pages/Settings/Settings';
 
 import './App.css';
 import selectIsAuth from './store/user/selectors/selectIsAuth';
@@ -43,6 +44,7 @@ function App() {
           )}
           {isAuth && (
             <>
+              <Route path="/settings" element={<Settings />} />
               <Route path="/tests" element={<MoodTests />} />
               <Route
                 path="/tests/depression"
