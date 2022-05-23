@@ -194,7 +194,7 @@ namespace WebCbt_Backend.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> PutUser(int userId, RegisterUser registerUser)
         {
-            if (User.Identity?.IsAuthenticated != true)
+            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != userId.ToString())
             {
                 return Unauthorized();
             }
@@ -203,7 +203,7 @@ namespace WebCbt_Backend.Controllers
 
             if (user == null)
             {
-                return StatusCode(500);
+                return NotFound();
             }
 
             var aspNetUser = await _userManager.FindByIdAsync(user.Id);
@@ -291,7 +291,7 @@ namespace WebCbt_Backend.Controllers
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            if (User.Identity?.IsAuthenticated != true)
+            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != userId.ToString())
             {
                 return Unauthorized();
             }
