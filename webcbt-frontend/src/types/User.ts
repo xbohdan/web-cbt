@@ -29,3 +29,14 @@ export interface LoginCredentials {
 export interface LoginResponse {
   accessToken: string;
 }
+
+export interface ManageAccountForm {
+  login: string;
+  password: string;
+  gender: string;
+  age?: number | string;
+}
+
+export interface ManageAccountResponse {
+  accessToken: string;
+}

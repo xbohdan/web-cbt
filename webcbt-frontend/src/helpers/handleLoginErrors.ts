@@ -2,10 +2,7 @@ import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import {FormInstance} from 'antd';
 import {toast} from 'react-toastify';
 
-const handleLoginErrors = (
-  err: FetchBaseQueryError,
-  form: FormInstance<any>,
-) => {
+const handleLoginErrors = (err: FetchBaseQueryError, form: FormInstance) => {
   if (err.status === 401) {
     form.setFields([
       {

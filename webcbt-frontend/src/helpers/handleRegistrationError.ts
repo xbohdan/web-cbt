@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 
 const handleRegistrationErrors = (
   err: FetchBaseQueryError,
-  form: FormInstance<any>,
+  form: FormInstance,
 ) => {
   if (err.status === 409) {
     form.setFields([
