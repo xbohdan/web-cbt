@@ -13,10 +13,10 @@ using WebCbt_Backend.Models;
 
 namespace WebCbt_Backend.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     [Authorize]
     [EnableCors("AllOrigins")]
+    [Route("[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -33,8 +33,8 @@ namespace WebCbt_Backend.Controllers
         }
 
         // POST: /user
-        [HttpPost]
         [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
         {
             var index = registerUser.Login.IndexOf("@");
@@ -80,8 +80,8 @@ namespace WebCbt_Backend.Controllers
         }
 
         // GET: /user
-        [HttpGet]
         [Authorize(Policy = "AdminOnly")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             if (User.Identity?.IsAuthenticated != true)
@@ -128,8 +128,8 @@ namespace WebCbt_Backend.Controllers
         }
 
         // POST: /user/login
-        [HttpPost("login")]
         [AllowAnonymous]
+        [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
             var identityUser = await _userManager.FindByEmailAsync(loginUser.Login);
@@ -143,7 +143,7 @@ namespace WebCbt_Backend.Controllers
 
             if (user == null)
             {
-                return StatusCode(500);
+                return Problem();
             }
 
             var claims = new List<Claim>
@@ -210,7 +210,7 @@ namespace WebCbt_Backend.Controllers
 
             if (aspNetUser == null)
             {
-                return StatusCode(500);
+                return Problem();
             }
 
             if (registerUser.Password != null)
