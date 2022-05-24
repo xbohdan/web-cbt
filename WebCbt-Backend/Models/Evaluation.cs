@@ -5,18 +5,13 @@ namespace WebCbt_Backend.Models
 {
     public partial class Evaluation
     {
-        public Evaluation()
-        {
-            ScoreSheets = new HashSet<ScoreSheet>();
-        }
-
         public int EvaluationId { get; set; }
         public int UserId { get; set; }
-        public string Date { get; set; } = null!;
-        public string Status { get; set; } = null!;
-        public int EvaluationType { get; set; }
-        public int TotalScore { get; set; }
-
-        public virtual ICollection<ScoreSheet> ScoreSheets { get; set; }
+        public string Category { get; set; } = null!;
+        public int Question1 { get; set; }
+        public int Question2 { get; set; }
+        public int Question3 { get; set; }
+        public int Question4 { get; set; }
+        public int Question5 { get; set; }
     }
 }
