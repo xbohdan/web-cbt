@@ -21,6 +21,8 @@ namespace WebCbt_Backend.Data
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
+        public virtual DbSet<Evaluation> Evaluations { get; set; } = null!;
+        public virtual DbSet<ScoreSheet> ScoreSheets { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -102,6 +104,31 @@ namespace WebCbt_Backend.Data
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserTokens)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<Evaluation>(entity =>
+            {
+                entity.Property(e => e.EvaluationId)
+                    .HasColumnName("EvaluationID")
+                    .UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.Date).HasColumnType("character varying");
+
+                entity.Property(e => e.Status).HasColumnType("character varying");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+            });
+
+            modelBuilder.Entity<ScoreSheet>(entity =>
+            {
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.EvaluationId).HasColumnName("EvaluationID");
+
+                entity.HasOne(d => d.Evaluation)
+                    .WithMany(p => p.ScoreSheets)
+                    .HasForeignKey(d => d.EvaluationId)
+                    .HasConstraintName("FK_ScoreSheets_EvaluationID");
             });
 
             modelBuilder.Entity<User>(entity =>
