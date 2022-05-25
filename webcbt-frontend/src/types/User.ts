@@ -1,8 +1,32 @@
 export type Gender = 'male' | 'female' | 'other' | 'would rather not say';
 
 export interface User {
+  userId: number;
   login: string;
+  age?: number | string;
+  gender: string;
+  userStatus: number;
+  banned: boolean;
   accessToken?: string;
+}
+
+export interface GetUserResponse {
+  userId: number;
+  login: string;
+  age?: number | string;
+  gender: string;
+  userStatus: number;
+  banned: boolean;
+}
+
+export interface PutUserRequest {
+  body: {
+    login: string;
+    password?: string;
+    age?: number | string;
+    gender?: string;
+  }
+  userId: number;
 }
 
 export interface RegistrationForm {
@@ -28,4 +52,11 @@ export interface LoginCredentials {
 
 export interface LoginResponse {
   accessToken: string;
+}
+
+export interface ManageAccountForm {
+  login: string;
+  password?: string;
+  gender?: string;
+  age?: number | string;
 }

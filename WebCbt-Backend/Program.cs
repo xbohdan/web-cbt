@@ -47,7 +47,19 @@ builder.Services.AddRouting(x =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+
+    app.UseSwaggerUI(x =>
+        x.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
+}
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();

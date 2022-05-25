@@ -1,8 +1,9 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import getToken from '../../helpers/getToken';
 import {
+  GetUserResponse,
   LoginCredentials,
-  LoginResponse,
+  LoginResponse, PutUserRequest,
   RegistrationRequest,
 } from '../../types/User';
 import {RootState} from '../store';
@@ -34,7 +35,20 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    getUser: builder.mutation<GetUserResponse, string>({
+      query: (userId) => ({
+        url: `${userId}`,
+        method: 'GET'
+      }),
+    }),
+    putUser: builder.mutation<{}, PutUserRequest>({
+      query: (credentials: PutUserRequest) => ({
+        url: `${credentials.userId}`,
+        method: 'PUT',
+        body: credentials.body,
+      }),
+    }),
   }),
 });
 
-export const {useLoginMutation, useRegistrationMutation} = authApi;
+export const {useLoginMutation, useRegistrationMutation, useGetUserMutation, usePutUserMutation} = authApi;
