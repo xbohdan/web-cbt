@@ -1,10 +1,11 @@
 import React from 'react';
-import {Form, Typography, Input, Button} from 'antd';
+import {Form, Typography, Input, Button, Select} from 'antd';
 
 import './Settings.css';
 import useSettings from '../../hooks/useSettings';
 
 const {Title} = Typography;
+const { Option } = Select;
 
 const Settings = () => {
   const [form] = Form.useForm();
@@ -15,6 +16,8 @@ const Settings = () => {
     userLogin,
     onSubmit,
     onSubmitFailed,
+    userGender,
+    userAge
   } = useSettings();
 
   return (
@@ -43,21 +46,15 @@ const Settings = () => {
           />
         </Form.Item>
         <Form.Item name="gender">
-          <Input
-            list="browsers"
-            disabled={isLoading || !isEditing}
-            placeholder="would rather not say"
-            readOnly
-          />
-          <datalist id="browsers">
-            <option value="male" />
-            <option value="female" />
-            <option value="other" />
-            <option value="would rather not say" />
-          </datalist>
+          <Select defaultValue={userGender} disabled={isLoading || !isEditing} style={{textAlign: "left"}}>
+            <Option value="male">male</Option>
+            <Option value="female">female</Option>
+            <Option value="other">other</Option>
+            <Option value="would rather not say">would rather not say</Option>
+          </Select>
         </Form.Item>
         <Form.Item name="age">
-          <Input defaultValue="25" disabled={isLoading || !isEditing} />
+          <Input defaultValue={userAge} disabled={isLoading || !isEditing} />
         </Form.Item>
         <Form.Item hidden={!isEditing}>
           <Button type="primary" htmlType="submit" loading={isLoading} block>
