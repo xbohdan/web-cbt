@@ -13,7 +13,7 @@ import jwt_decode from 'jwt-decode';
 
 const useLogin = (form: FormInstance) => {
   const [login, {isLoading}] = useLoginMutation();
-  const [getUser, userId] = useGetUserMutation();
+  const [getUser] = useGetUserMutation();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

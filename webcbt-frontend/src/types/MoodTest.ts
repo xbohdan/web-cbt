@@ -1,5 +1,3 @@
-type userId = 0 | 1;
-
 export type MoodTestCategory =
   | 'Depression'
   | 'Anxiety'
@@ -17,6 +15,6 @@ export default interface MoodTest {
 }
 
 export interface MoodTestRequest extends MoodTest {
-  userId: userId;
+  userId: number;
   category: MoodTestCategory;
 }

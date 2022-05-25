@@ -7,7 +7,6 @@ import {
   RegistrationRequest,
 } from '../../types/User';
 import {RootState} from '../store';
-import useAppSelector from '../../hooks/useAppSelector';
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({
