@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace WebCbt_Backend.Controllers
 {
     [ApiController]
     [Authorize]
+    [EnableCors("AllOrigins")]
     [Route("[controller]")]
     public class EvaluationController : ControllerBase
     {
