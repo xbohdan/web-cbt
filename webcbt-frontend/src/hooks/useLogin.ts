@@ -31,20 +31,7 @@ const useLogin = (form: FormInstance) => {
       } else {
         loginResponse = await login(formData).unwrap();
       }
-
-      // Prepare user object from successful response
-      let user: User = {
-        login: formData.login,
-        accessToken: loginResponse.accessToken,
-        userId: getUserResponse.userId,
-        gender: getUserResponse.gender,
-        userStatus: getUserResponse.userStatus,
-        banned: getUserResponse.banned
-      };
-
-      // Set user in Redux store
-      dispatch(setUser(user));
-
+      
       // Set user in localStorage (to keep user logged in after page refresh)
       localStorage.setItem('LOGIN', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
@@ -64,6 +51,19 @@ const useLogin = (form: FormInstance) => {
       } else {
         getUserResponse = await getUser(jwt_decode<{userId: string}>(loginResponse.accessToken).userId).unwrap();
       }
+      
+      // Prepare user object from successful response
+      let user: User = {
+        login: formData.login,
+        accessToken: loginResponse.accessToken,
+        userId: getUserResponse.userId,
+        gender: getUserResponse.gender,
+        userStatus: getUserResponse.userStatus,
+        banned: getUserResponse.banned
+      };
+
+      // Set user in Redux store
+      dispatch(setUser(user));
       
       localStorage.setItem('AGE', getUserResponse.age!!.toString());
       localStorage.setItem('GENDER', getUserResponse.gender);
