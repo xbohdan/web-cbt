@@ -36,7 +36,10 @@ export const authApi = createApi({
       }),
     }),
     getUser: builder.mutation<GetUserResponse, string>({
-      query: (userId) => `${userId}`,
+      query: (userId) => ({
+        url: `${userId}`,
+        method: 'GET'
+      }),
     }),
     putUser: builder.mutation<{}, PutUserRequest>({
       query: (credentials: PutUserRequest) => ({
