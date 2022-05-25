@@ -97,15 +97,15 @@ namespace WebCbt_Backend.Controllers
 
         // PUT: /evaluation/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvaluation(int id, Evaluation evaluation)
+        [HttpPut("{evaluationId}")]
+        public async Task<IActionResult> PutEvaluation(int evaluationId, Evaluation evaluation)
         {
             if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != evaluation.UserId.ToString())
             {
                 return Unauthorized();
             }
 
-            if (id != evaluation.EvaluationId)
+            if (evaluationId != evaluation.EvaluationId)
             {
                 return BadRequest();
             }
@@ -118,7 +118,7 @@ namespace WebCbt_Backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EvaluationExists(id))
+                if (!EvaluationExists(evaluationId))
                 {
                     return NotFound();
                 }
