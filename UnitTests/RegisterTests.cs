@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace UnitTests
 {
-     [TestClass]
+    //[TestClass]
     public class RegisterTests
     {
         private static Random random = new Random(55);
