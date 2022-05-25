@@ -171,7 +171,7 @@ namespace WebCbt_Backend.Controllers
             });
         }
 
-        // GET: /user/{userId}
+        // GET: /user/5
         [HttpGet("{userId}")]
         public async Task<ActionResult<User>> GetUser(int userId)
         {
@@ -190,7 +190,7 @@ namespace WebCbt_Backend.Controllers
             return Ok(CreateUserDto(user));
         }
 
-        // PUT: /user/{userId}
+        // PUT: /user/5
         [HttpPut("{userId}")]
         public async Task<IActionResult> PutUser(int userId, RegisterUser registerUser)
         {
@@ -287,7 +287,7 @@ namespace WebCbt_Backend.Controllers
             return _dbContext.Users.Any(x => x.UserId == userId);
         }
 
-        // DELETE: /user/{userId}
+        // DELETE: /user/5
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
