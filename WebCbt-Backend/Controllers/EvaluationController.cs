@@ -15,7 +15,7 @@ using WebCbt_Backend.Models;
 namespace WebCbt_Backend.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [EnableCors("AllOrigins")]
     [Route("[controller]")]
     public class EvaluationController : ControllerBase
