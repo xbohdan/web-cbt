@@ -12,7 +12,7 @@ namespace UnitTests.Integration_Tests
     {
         // Our API: https://130.162.232.178:7198
         private HttpClient _httpClient;
-        private string loginEndpointConnection = "https://130.162.232.178:7198/user/login";
+        private string loginPostConnection = "https://130.162.232.178:7198/user/login";
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5";
         public IntegrationLoginTests()
@@ -35,7 +35,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(loginEndpointConnection, httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -54,7 +54,7 @@ namespace UnitTests.Integration_Tests
 
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(loginEndpointConnection, httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -73,7 +73,7 @@ namespace UnitTests.Integration_Tests
 
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(loginEndpointConnection, httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -92,7 +92,7 @@ namespace UnitTests.Integration_Tests
 
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(loginEndpointConnection, httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -111,7 +111,7 @@ namespace UnitTests.Integration_Tests
 
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(loginEndpointConnection, httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 

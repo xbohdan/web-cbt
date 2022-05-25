@@ -15,7 +15,7 @@ namespace UnitTests.Integration_Tests
         // Our API: https://130.162.232.178:7198
         private HttpClient _httpClient;
         private static Random random = new Random();
-        string registrationEndPointConnection = "https://130.162.232.178:7198/user";
+        string registrationPostConnection = "https://130.162.232.178:7198/user";
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5";
         public IntegrationRegistrationTests()
@@ -48,7 +48,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PostAsync(registrationEndPointConnection, httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
             
             var codeResult = response.StatusCode;
 
@@ -69,7 +69,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(registrationEndPointConnection, httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -96,7 +96,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(registrationEndPointConnection, httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -117,7 +117,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(registrationEndPointConnection, httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -138,7 +138,7 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(registrationEndPointConnection, httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
