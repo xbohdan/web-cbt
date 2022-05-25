@@ -113,6 +113,8 @@ namespace WebCbt_Backend.Data
 
                 entity.Property(e => e.Category).HasColumnType("character varying");
 
+                entity.Property(e => e.Status).HasColumnType("character varying");
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
 

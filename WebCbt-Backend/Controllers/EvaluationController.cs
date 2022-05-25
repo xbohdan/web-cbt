@@ -50,21 +50,21 @@ namespace WebCbt_Backend.Controllers
         }
 
         // GET: /evaluation/findByUserId?userId=5
-        [HttpGet("findByUserId")]
-        public async Task<ActionResult<IEnumerable<Evaluation>>> FindEvaluationsByUserId(int userId)
-        {
-            if (User.Identity?.IsAuthenticated != true)
-            {
-                return Unauthorized();
-            }
+        //[HttpGet("findByUserId")]
+        //public async Task<ActionResult<IEnumerable<Evaluation>>> FindEvaluationsByUserId(int userId)
+        //{
+        //    if (User.Identity?.IsAuthenticated != true)
+        //    {
+        //        return Unauthorized();
+        //    }
 
-            if (_context.Evaluations == null)
-            {
-                return NotFound();
-            }
+        //    if (_context.Evaluations == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return await _context.Evaluations.Where(x => x.UserId == userId).ToListAsync();
-        }
+        //    return await _context.Evaluations.Where(x => x.UserId == userId).ToListAsync();
+        //}
 
         // GET: /evaluation/5
         [HttpGet("{evaluationId}")]
