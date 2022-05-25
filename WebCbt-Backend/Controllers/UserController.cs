@@ -21,14 +21,14 @@ namespace WebCbt_Backend.Controllers
     {
         private readonly IConfiguration _configuration;
 
-        private readonly WebCbtDbContext _dbContext;
+        private readonly WebCbtDbContext _context;
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(IConfiguration configuration, WebCbtDbContext dbContext, UserManager<IdentityUser> userManager)
+        public UserController(IConfiguration configuration, WebCbtDbContext context, UserManager<IdentityUser> userManager)
         {
             _configuration = configuration;
-            _dbContext = dbContext;
+            _context = context;
             _userManager = userManager;
         }
 
@@ -73,8 +73,8 @@ namespace WebCbt_Backend.Controllers
                 Banned = false
             };
 
-            _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
@@ -90,7 +90,7 @@ namespace WebCbt_Backend.Controllers
             }
 
             var userDtos = new List<UserDto>();
-            foreach (var user in await _dbContext.Users.ToListAsync())
+            foreach (var user in await _context.Users.ToListAsync())
             {
                 userDtos.Add(CreateUserDto(user));
             }
@@ -139,7 +139,7 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == identityUser.Id);
 
             if (user == null)
             {
@@ -180,7 +180,7 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
@@ -199,7 +199,7 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
@@ -261,11 +261,11 @@ namespace WebCbt_Backend.Controllers
 
             user.Gender = registerUser.Gender;
 
-            _dbContext.Entry(user).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
-                await _dbContext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -284,7 +284,7 @@ namespace WebCbt_Backend.Controllers
 
         private bool UserExists(int userId)
         {
-            return _dbContext.Users.Any(x => x.UserId == userId);
+            return _context.Users.Any(x => x.UserId == userId);
         }
 
         // DELETE: /user/5
@@ -296,16 +296,16 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Users.Remove(user);
+            _context.Users.Remove(user);
 
-            _dbContext.SaveChanges();
+            _context.SaveChanges();
 
             return NoContent();
         }
