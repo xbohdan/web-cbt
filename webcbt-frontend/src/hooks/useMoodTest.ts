@@ -7,16 +7,19 @@ import handleMoodTestErrors from '../helpers/handleMoodTestErrors';
 import returnDataWithDelay from '../helpers/returnDataWithDelay';
 import {useSubmitMoodTestMutation} from '../store/services/moodtest';
 import MoodTest, {MoodTestCategory, MoodTestRequest} from '../types/MoodTest';
+import useAppSelector from './useAppSelector';
+import selectId from '../store/user/selectors/selectId';
 
 const useMoodTest = (form: FormInstance, testCategory: MoodTestCategory) => {
   const [submitMoodTest, {isLoading}] = useSubmitMoodTestMutation();
+  const userId = useAppSelector(selectId);
 
   const navigate = useNavigate();
 
   const onSubmit = async (formData: MoodTest) => {
     try {
       const moodTestRequest: MoodTestRequest = {
-        userId: 0,
+        userId: userId,
         category: testCategory,
         ...formData,
       };

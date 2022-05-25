@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {toast} from 'react-toastify';
 import {isDev} from '../config';
 import returnDataWithDelay from '../helpers/returnDataWithDelay';
