@@ -7,6 +7,11 @@ import {User} from '../../types/User';
 export const initialState: User = {
   login: localStorage.getItem('LOGIN') || '',
   accessToken: localStorage.getItem('TOKEN') || undefined,
+  age: localStorage.getItem('AGE') || undefined,
+  gender: localStorage.getItem('GENDER') || 'would rather not say',
+  userStatus: Number(localStorage.getItem('STATUS')),
+  banned: Boolean(localStorage.getItem('BANNED')),
+  userId: Number(localStorage.getItem('ID'))
 };
 
 export const userSlice = createSlice({

@@ -1,45 +1,73 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {isDev} from '../config';
 import returnDataWithDelay from '../helpers/returnDataWithDelay';
 import selectLogin from '../store/user/selectors/selectLogin';
 import {setUser} from '../store/user/slice';
-import {ManageAccountForm, ManageAccountResponse, User} from '../types/User';
+import {ManageAccountForm, PutUserRequest, User} from '../types/User';
 import useAppDispatch from './useAppDispatch';
 import useAppSelector from './useAppSelector';
+import selectAge from '../store/user/selectors/selectAge';
+import selectGender from '../store/user/selectors/selectGender';
+import {usePutUserMutation} from '../store/services/auth';
+import selectId from '../store/user/selectors/selectId';
+import selectToken from '../store/user/selectors/selectToken';
+import selectStatus from '../store/user/selectors/selectStatus';
+import selectBanned from '../store/user/selectors/selectBanned';
 
 const useSettings = () => {
-  const [isLoading, setLoadingState] = useState(false);
+  const [putUser, {isLoading}] = usePutUserMutation();
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector(selectLogin);
+  const userAge = useAppSelector(selectAge);
+  const userGender = useAppSelector(selectGender);
+  const userId = useAppSelector(selectId);
+  const userToken = useAppSelector(selectToken);
+  const userStatus = useAppSelector(selectStatus);
+  const userIsBanned = useAppSelector(selectBanned);
   const [isEditing, setEditingState] = useState(false);
 
   const onSubmit = async (formData: ManageAccountForm) => {
     try {
-      setLoadingState(true);
-      let manageAccountResponse: ManageAccountResponse;
       if (!formData.login) formData.login = userLogin;
+      if (!formData.gender) formData.gender = userGender;
+      if (!formData.age) formData.age = userAge;
+      if (!formData.password) delete formData.password;
       if (isDev) {
-        manageAccountResponse = await returnDataWithDelay(
-          {accessToken: 'mockToken'},
-          'fast 3G',
-        );
-        let user: User = {
-          login: formData.login,
-          accessToken: 'mockToken',
-        };
-        // Set user in Redux store
-        dispatch(setUser(user));
-
-        localStorage.setItem('LOGIN', formData.login);
-        localStorage.setItem('TOKEN', manageAccountResponse.accessToken);
+        await returnDataWithDelay(200, 'fast 3G');
+      }else{
+        const putUserRequest: PutUserRequest = {
+          userId: userId,
+          body: {
+            login: formData.login,
+            password: formData.password,
+            age: formData.age,
+            gender: formData.gender
+          }
+        }
+        await putUser(putUserRequest).unwrap()
       }
 
+      let user: User = {
+        login: formData.login,
+        accessToken: userToken!!,
+        userId: userId,
+        gender: formData.gender!!,
+        userStatus: userStatus,
+        banned: userIsBanned,
+        age: formData.age
+      };
+
+      dispatch(setUser(user));
+
+      localStorage.setItem('LOGIN', formData.login);
+      localStorage.setItem('AGE', formData.age!!.toString());
+      localStorage.setItem('GENDER', formData.gender);
+
       toast.success('Account settings changed!');
-      setLoadingState(false);
       setEditingState(false);
     } catch (err) {
-      /*handling errors*/
+      toast.error('Unknown error. Please try later');
     }
   };
 
@@ -55,6 +83,8 @@ const useSettings = () => {
     userLogin,
     onSubmit,
     onSubmitFailed,
+    userAge,
+    userGender
   };
 };
 
