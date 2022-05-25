@@ -40,7 +40,7 @@ const useLogin = (form: FormInstance) => {
         );
       } else {
         loginResponse = await login(formData).unwrap();
-        getUserResponse = await getUser(jwt_decode(loginResponse.accessToken)).unwrap();
+        getUserResponse = await getUser(jwt_decode<{userId: string}>(loginResponse.accessToken).userId).unwrap();
       }
 
       // Prepare user object from successful response
