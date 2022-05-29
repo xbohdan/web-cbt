@@ -1,0 +1,13 @@
+.adminSettings {
+  width: 100%;
+  height: 100%;
+  grid-area: content;
+}
+
+.table {
+  margin-top: 50px;
+}
+
+.deleteButton {
+  color: rgb(255, 0, 0);
+}
