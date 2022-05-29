@@ -1,30 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Form,
   Typography,
   Input,
-  Radio,
   InputNumber,
   Button,
-  RadioChangeEvent, Select,
+  Select,
 } from 'antd';
 import {Link} from 'react-router-dom';
 
 import './Registration.css';
 import validatePassword from '../../helpers/validatePassword';
 import useRegistration from '../../hooks/useRegistration';
-import {Gender} from '../../types/User';
 
 const {Title} = Typography;
 
 const Registration = () => {
   const [form] = Form.useForm();
-  const [radioValue, setRadioValue] = useState<Gender>('would rather not say');
   const {isLoading, onSubmit, onSubmitFailed} = useRegistration(form);
-
-  const setGender = (e: RadioChangeEvent) => {
-    setRadioValue(e.target.value);
-  };
 
   return (
     <div className="registration">
@@ -65,7 +58,7 @@ const Registration = () => {
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
         <Form.Item name="gender">
-            <Select onChange={setGender} disabled={isLoading} style={{textAlign: "left"}}>
+            <Select disabled={isLoading} style={{textAlign: "left"}}>
               <Select.Option value="male">male</Select.Option>
               <Select.Option value="female">female</Select.Option>
               <Select.Option value="other">other</Select.Option>
