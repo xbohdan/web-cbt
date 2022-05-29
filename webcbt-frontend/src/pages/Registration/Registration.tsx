@@ -6,7 +6,7 @@ import {
   Radio,
   InputNumber,
   Button,
-  RadioChangeEvent,
+  RadioChangeEvent, Select,
 } from 'antd';
 import {Link} from 'react-router-dom';
 
@@ -65,19 +65,12 @@ const Registration = () => {
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
         <Form.Item name="gender">
-          <Radio.Group
-            onChange={setGender}
-            value={radioValue}
-            buttonStyle="solid"
-            disabled={isLoading}
-          >
-            <Radio.Button value="male">Male</Radio.Button>
-            <Radio.Button value="female">Female</Radio.Button>
-            <Radio.Button value="other">Other</Radio.Button>
-            <Radio.Button value="would rather not say">
-              Would rather not say
-            </Radio.Button>
-          </Radio.Group>
+            <Select onChange={setGender} disabled={isLoading} style={{textAlign: "left"}}>
+              <Select.Option value="male">male</Select.Option>
+              <Select.Option value="female">female</Select.Option>
+              <Select.Option value="other">other</Select.Option>
+              <Select.Option value="would rather not say">would rather not say</Select.Option>
+            </Select>
         </Form.Item>
         <Form.Item name="age">
           <label>
