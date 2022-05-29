@@ -1,15 +1,13 @@
 .adminSettings {
   width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+  height: 100%;
   grid-area: content;
 }
 
-.deleteButton {
-  background-color: rgb(204, 0, 0);
-  color: rgb(255, 255, 255);
+.table {
+  margin-top: 50px;
 }
 
-.deleteButton:hover {
-  background-color: rgb(220, 0, 0);
+.deleteButton {
+  color: rgb(255, 0, 0);
 }
