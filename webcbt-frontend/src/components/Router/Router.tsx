@@ -23,12 +23,25 @@ import Registration from '../../pages/Registration/Registration';
 import Settings from '../../pages/Settings/Settings';
 import selectIsAuth from '../../store/user/selectors/selectIsAuth';
 import MoodTestForm from '../MoodTestForm/MoodTestForm';
+import AdminSettings from '../../pages/AdminSettings/AdminSettings';
+import selectStatus from '../../store/user/selectors/selectStatus';
 
 const Router = () => {
   const isAuth = useAppSelector(selectIsAuth);
+  const isAdmin = useAppSelector(selectStatus);
 
   return (
     <Routes>
+      {isAuth && !isAdmin && (
+        <>
+          <Route path="/settings" element={<Settings />} />
+        </>
+      )}
+      {isAuth && isAdmin && (
+        <>
+          <Route path="/settings" element={<AdminSettings />} />
+        </>
+      )}
       {!isAuth && (
         <>
           <Route path="/registration" element={<Registration />} />
@@ -39,6 +52,7 @@ const Router = () => {
       {isAuth && (
         <>
           <Route path="/settings" element={<Settings />} />
+          <Route path="/adminsettings" element={<AdminSettings />} />
           <Route path="/tests" element={<MoodTests />} />
           <Route
             path="/tests/depression"
