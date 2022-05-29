@@ -32,12 +32,12 @@ const Router = () => {
 
   return (
     <Routes>
-      {isAuth && isAdmin && (
+      {isAuth && !isAdmin && (
         <>
           <Route path="/settings" element={<Settings />} />
         </>
       )}
-      {isAuth && !isAdmin && (
+      {isAuth && isAdmin && (
         <>
           <Route path="/settings" element={<AdminSettings />} />
         </>
