@@ -52,7 +52,7 @@ const useAdminSettings = () => {
     };
 
     GetUserData().then(() => {});
-  }, [getUserData])
+  }, [getUserData, deleteUser])
 
   const OnDelete = async (userId: number) => {
     try {
