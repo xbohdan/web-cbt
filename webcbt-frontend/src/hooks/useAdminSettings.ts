@@ -10,19 +10,6 @@ const useAdminSettings = () => {
   const [userData, setUserData] = useState<GetUserResponse[]>([]);
   const [deleteUser] = useDeleteUserMutation();
   
-  const OnDelete = async (userId: number) => {
-    try {
-      if (isDev) {
-        await returnDataWithDelay(204, 'fast 3G');
-      }else{
-        await deleteUser(userId.toString()).unwrap();
-      }
-      toast.success('User was successfully deleted');
-    } catch (err) {
-      toast.error('Unknown error. Please try later');
-    }
-  };
-
   useEffect(() => {
     const GetUserData = async () =>
     {
@@ -65,7 +52,20 @@ const useAdminSettings = () => {
     };
 
     GetUserData().then(() => {});
-  }, [getUserData, OnDelete])
+  }, [getUserData])
+  
+  const OnDelete = async (userId: number) => {
+    try {
+      if (isDev) {
+        await returnDataWithDelay(204, 'fast 3G');
+      }else{
+        await deleteUser(userId.toString()).unwrap();
+      }
+      toast.success('User was successfully deleted');
+    } catch (err) {
+      toast.error('Unknown error. Please try later');
+    }
+  };
 
   return {
     setUserData,
