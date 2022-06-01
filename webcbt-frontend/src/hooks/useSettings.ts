@@ -31,7 +31,7 @@ const useSettings = () => {
     try {
       if (!formData.login) formData.login = userLogin;
       if (!formData.gender) formData.gender = userGender;
-      if (!formData.age) formData.age = userAge;
+      if (!formData.age) delete formData.age;
       if (!formData.password) delete formData.password;
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
@@ -61,7 +61,11 @@ const useSettings = () => {
       dispatch(setUser(user));
 
       localStorage.setItem('LOGIN', formData.login);
-      localStorage.setItem('AGE', formData.age!!.toString());
+      if (formData.age) {
+        localStorage.setItem('AGE', formData.age.toString());
+      }else{
+        localStorage.setItem('AGE', '');
+      }
       localStorage.setItem('GENDER', formData.gender);
 
       toast.success('Account settings changed!');

@@ -31,11 +31,11 @@ const useLogin = (form: FormInstance) => {
       } else {
         loginResponse = await login(formData).unwrap();
       }
-      
+
       // Set user in localStorage (to keep user logged in after page refresh)
       localStorage.setItem('LOGIN', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
-      
+
       // GET user/{userId}
       if (isDev) {
         getUserResponse = await returnDataWithDelay(
@@ -51,7 +51,7 @@ const useLogin = (form: FormInstance) => {
       } else {
         getUserResponse = await getUser(jwt_decode<{userId: string}>(loginResponse.accessToken).userId).unwrap();
       }
-      
+
       // Prepare user object from successful response
       let user: User = {
         login: formData.login,
@@ -64,8 +64,10 @@ const useLogin = (form: FormInstance) => {
 
       // Set user in Redux store
       dispatch(setUser(user));
-      
-      localStorage.setItem('AGE', getUserResponse.age!!.toString());
+
+      if (getUserResponse.age) {
+        localStorage.setItem('AGE', getUserResponse.age.toString());
+      }
       localStorage.setItem('GENDER', getUserResponse.gender);
       localStorage.setItem('STATUS', getUserResponse.userStatus.toString());
       localStorage.setItem('ID', getUserResponse.userId.toString());
