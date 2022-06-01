@@ -13,7 +13,7 @@ namespace Selenium_Tests
     public class Tests
     {
         IWebDriver driver;
-        Random random = new Random(1234);
+        Random random = new Random(DateTime.Now.Millisecond);
 
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5";
@@ -110,6 +110,7 @@ namespace Selenium_Tests
             WebElement submitTestButton =
                 (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-primary moodTestSubmit']"));
         }
+
         [TearDown]
         public void TearDown()
         {

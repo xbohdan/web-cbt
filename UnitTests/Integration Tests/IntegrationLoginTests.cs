@@ -10,9 +10,12 @@ namespace UnitTests.Integration_Tests
     [TestClass]
     public class IntegrationLoginTests
     {
-        // Our API: https://130.162.232.178:7198
+        // Our API: https://130.162.232.178:7198/
+        // Team CBT API: https://web-cbt.herokuapp.com/
+        // Team Typeracers: https://school-se-back.monicz.pl/
+
         private HttpClient _httpClient;
-        private string loginPostConnection = "https://130.162.232.178:7198/user/login";
+        private string loginPostConnection = "https://web-cbt.herokuapp.com/user/login";
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5";
         public IntegrationLoginTests()

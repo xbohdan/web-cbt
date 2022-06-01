@@ -12,10 +12,13 @@ namespace UnitTests.Integration_Tests
     [TestClass]
     public class IntegrationRegistrationTests
     {
-        // Our API: https://130.162.232.178:7198
+        // Our API: https://130.162.232.178:7198/
+        // Team CBT API: https://web-cbt.herokuapp.com/
+        // Team Typeracers: https://school-se-back.monicz.pl/
+
         private HttpClient _httpClient;
-        private static Random random = new Random();
-        string registrationPostConnection = "https://130.162.232.178:7198/user";
+        private static Random random = new Random(DateTime.Now.Millisecond);
+        string registrationPostConnection = "https://web-cbt.herokuapp.com/user";
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5";
         public IntegrationRegistrationTests()

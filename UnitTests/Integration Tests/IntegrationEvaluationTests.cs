@@ -11,14 +11,15 @@ namespace UnitTests.Integration_Tests
     [TestClass]
     public class IntegrationEvaluationTests
     {
-        // Our API: https://130.162.232.178:7198
+        // Our API: https://130.162.232.178:7198/
         // Team CBT API: https://web-cbt.herokuapp.com/
         // Team Typeracers: https://school-se-back.monicz.pl/
+
         private HttpClient _httpClient;
         private string evaluationPostEndpoint = "https://school-se-back.monicz.pl/evaluation";
         int userId = 1;
         string[] categories = { "Depression", "Anxiety", "Addictions", "Anger", "Relationships", "Happiness" };
-        private static Random random = new Random();
+        private static Random random = new Random(DateTime.Now.Millisecond);
 
         private int[] existingAnswers = new int[5];
         private string existingCategory;
@@ -150,8 +151,6 @@ namespace UnitTests.Integration_Tests
             Assert.AreEqual(codeResult, System.Net.HttpStatusCode.BadRequest);
         }
 
-        [TestMethod]
-        public async Task Eval
 
     }
 }
