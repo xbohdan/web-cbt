@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -43,11 +44,34 @@ namespace WebCbt_Backend.Controllers
                 return Problem("Entity set is null.");
             }
 
+            if (!EvaluationValid(evaluation))
+            {
+                return BadRequest();
+            }
+
             _context.Evaluations.Add(evaluation);
 
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        private static bool EvaluationValid(Evaluation evaluation)
+        {
+            var evaluationProps = typeof(Evaluation).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(x => x.CanRead && x.PropertyType == typeof(int) && x.Name.StartsWith("Question"));
+
+            foreach (var evaluationProp in evaluationProps)
+            {
+                var evaluationValue = evaluationProp.GetValue(evaluation);
+
+                if (evaluationValue is not int question || question < 1 || question > 5)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // GET: /evaluation/findByUserId?userId=5
@@ -109,6 +133,11 @@ namespace WebCbt_Backend.Controllers
             }
 
             if (evaluationId != evaluation.EvaluationId)
+            {
+                return BadRequest();
+            }
+
+            if (!EvaluationValid(evaluation))
             {
                 return BadRequest();
             }

@@ -83,7 +83,7 @@ namespace UnitTests.Integration_Tests
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
             _httpClient.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer Token", bearerToken);
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
 
             var response = await _httpClient.PostAsync(evaluationPostEndpoint, httpContent);
 
