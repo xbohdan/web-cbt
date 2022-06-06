@@ -20,7 +20,7 @@ namespace UnitTests.Integration_Tests
         private static Random random = new Random(DateTime.Now.Millisecond);
         string registrationPostConnection = "https://web-cbt.herokuapp.com/user";
         string existingLogin = "amolnikita@gmail.com";
-        string existingPassword = "sisKa_5";
+        string existingPassword = "sisKa_5_";
         public IntegrationRegistrationTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();

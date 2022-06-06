@@ -17,7 +17,7 @@ namespace UnitTests.Integration_Tests
         private HttpClient _httpClient;
         private string loginPostConnection = "https://web-cbt.herokuapp.com/user/login";
         string existingLogin = "amolnikita@gmail.com";
-        string existingPassword = "sisKa_5";
+        string existingPassword = "sisKa_5_";
         public IntegrationLoginTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();

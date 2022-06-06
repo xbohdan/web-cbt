@@ -2,11 +2,14 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Selenium_Tests
 {
@@ -16,7 +19,9 @@ namespace Selenium_Tests
         Random random = new Random(DateTime.Now.Millisecond);
 
         string existingLogin = "amolnikita@gmail.com";
-        string existingPassword = "sisKa_5";
+        string existingPassword = "sisKa_5_";
+        int bannerTime = 5000;
+        int smallDelay = 500;
 
         [SetUp]
         public void Setup()
@@ -30,7 +35,7 @@ namespace Selenium_Tests
             driver = new ChromeDriver(path + @"\drivers", options);
         }
 
-        [Test]
+        //[Test]
         public void LoginUser()
         {
             driver.Navigate().GoToUrl("http://130.162.232.178/login");
@@ -49,7 +54,7 @@ namespace Selenium_Tests
             loginButton.Click();
         }
 
-        [Test]
+        //[Test]
         public void RegisterUser()
         {
             driver.Navigate().GoToUrl("http://130.162.232.178/registration");
@@ -79,7 +84,6 @@ namespace Selenium_Tests
         public void TakeMoodTest()
         {
             driver.Navigate().GoToUrl("http://130.162.232.178/login");
-            Assert.IsTrue(driver.FindElement(By.Id("loginForm")).Displayed);
             // already existing user
             string login = existingLogin;
             string password = existingPassword;
@@ -94,9 +98,14 @@ namespace Selenium_Tests
             loginButton.Click();
 
             // at this point we are at main page
-            WebElement moodTestsButton = (WebElement)driver.FindElement(By.CssSelector("a[class='linkToTests']"));
+
+            // wait explicitly
+            Thread.Sleep(bannerTime + 100);
+
+            WebElement moodTestsButton = (WebElement)(driver.FindElement(By.CssSelector("[class='moodTestsParagraph']")));
             moodTestsButton.Click();
             // choose category
+            Thread.Sleep(smallDelay);
             WebElement happinessImage = (WebElement)driver.FindElement(By.CssSelector("img[alt='happiness'"));
 
             happinessImage.Click();
@@ -107,8 +116,12 @@ namespace Selenium_Tests
             foreach(IWebElement question in questions_answer5)
                 question.Click();
 
-            WebElement submitTestButton =
+            Thread.Sleep(smallDelay);
+            WebElement submitTestButton = 
                 (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-primary moodTestSubmit']"));
+            submitTestButton.Click();
+
+            Assert.IsTrue(driver.FindElement(By.Id("moodTestForm")).Displayed);
         }
 
         [TearDown]

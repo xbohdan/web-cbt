@@ -13,6 +13,8 @@ using System.Linq;
 
 namespace UnitTests
 {
+
+    // TODO: Make them work
     //[TestClass]
     public class RegisterTests
     {
@@ -61,6 +63,8 @@ namespace UnitTests
             Assert.AreEqual(expected.GetType(), actual.Result.GetType());
 
         }
+
+        // TODO: Make them work
         //[TestMethod]
         public void RegisterExistingUser()
         {
