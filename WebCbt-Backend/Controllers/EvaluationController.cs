@@ -32,7 +32,8 @@ namespace WebCbt_Backend.Controllers
         [HttpPost("~/moodtests")]
         public async Task<ActionResult<Evaluation>> PostEvaluation(Evaluation evaluation)
         {
-            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString()))
             {
                 return Unauthorized();
             }
@@ -53,7 +54,8 @@ namespace WebCbt_Backend.Controllers
         [HttpGet("findByUserId")]
         public async Task<ActionResult<IEnumerable<Evaluation>>> FindEvaluationsByUserId(int userId)
         {
-            if (User.Identity?.IsAuthenticated != true)
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != userId.ToString()))
             {
                 return Unauthorized();
             }
@@ -87,7 +89,7 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            if (User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString())
             {
                 return Unauthorized();
             }
@@ -100,7 +102,8 @@ namespace WebCbt_Backend.Controllers
         [HttpPut("{evaluationId}")]
         public async Task<IActionResult> PutEvaluation(int evaluationId, Evaluation evaluation)
         {
-            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString()))
             {
                 return Unauthorized();
             }
@@ -157,7 +160,7 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            if (User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString())
             {
                 return Unauthorized();
             }
