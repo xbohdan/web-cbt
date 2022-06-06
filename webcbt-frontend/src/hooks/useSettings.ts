@@ -31,7 +31,7 @@ const useSettings = () => {
     try {
       if (!formData.login) formData.login = userLogin;
       if (!formData.gender) formData.gender = userGender;
-      if (!formData.age) delete formData.age;
+      if (!formData.age) formData.age = userAge;
       if (!formData.password) delete formData.password;
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
@@ -63,8 +63,6 @@ const useSettings = () => {
       localStorage.setItem('LOGIN', formData.login);
       if (formData.age) {
         localStorage.setItem('AGE', formData.age.toString());
-      }else{
-        localStorage.setItem('AGE', '');
       }
       localStorage.setItem('GENDER', formData.gender);
 

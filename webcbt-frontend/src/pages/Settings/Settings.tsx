@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Typography, Input, Button, Select} from 'antd';
+import {Form, Typography, Input, Button, Select, InputNumber} from 'antd';
 
 import './Settings.css';
 import useSettings from '../../hooks/useSettings';
@@ -54,7 +54,15 @@ const Settings = () => {
           </Select>
         </Form.Item>
         <Form.Item name="age">
-          <Input defaultValue={userAge} disabled={isLoading || !isEditing} />
+          <label>
+            Age:&nbsp;&nbsp;&nbsp;
+            <InputNumber
+              min={12}
+              max={125}
+              disabled={isLoading || !isEditing}
+              defaultValue={userAge}
+            />
+          </label>
         </Form.Item>
         <Form.Item hidden={!isEditing}>
           <Button type="primary" htmlType="submit" loading={isLoading} block>
