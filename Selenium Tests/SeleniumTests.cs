@@ -20,6 +20,10 @@ namespace Selenium_Tests
 
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5_";
+
+        private string adminLogin = "admin1@gmail.com";
+        private string adminPassword = "Password1!";
+
         int bannerTime = 5000;
         int smallDelay = 500;
 
@@ -35,7 +39,7 @@ namespace Selenium_Tests
             driver = new ChromeDriver(path + @"\drivers", options);
         }
 
-        //[Test]
+        [Test]
         public void LoginUser()
         {
             driver.Navigate().GoToUrl("http://130.162.232.178/login");
@@ -54,7 +58,7 @@ namespace Selenium_Tests
             loginButton.Click();
         }
 
-        //[Test]
+        [Test]
         public void RegisterUser()
         {
             driver.Navigate().GoToUrl("http://130.162.232.178/registration");
@@ -123,11 +127,74 @@ namespace Selenium_Tests
 
             Assert.IsTrue(driver.FindElement(By.Id("moodTestForm")).Displayed);
         }
-
-        [TearDown]
-        public void TearDown()
+        [Test]
+        public void ChangeUserInformation()
         {
-            //driver.Quit();
+            driver.Navigate().GoToUrl("http://130.162.232.178/login");
+            // already existing user
+            string login = existingLogin;
+            string password = existingPassword;
+
+            WebElement usernameInput = (WebElement)driver.FindElement(By.Id("loginForm_login"));
+            WebElement passwordInput = (WebElement)driver.FindElement(By.Id("loginForm_password"));
+            
+            usernameInput.SendKeys(login);
+            passwordInput.SendKeys(password);
+
+            WebElement loginButton = (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-primary ant-btn-block']"));
+            loginButton.Click();
+
+            // wait explicitly
+            Thread.Sleep(bannerTime + 100);
+
+            WebElement profileButton = (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-default headerButton']"));
+            profileButton.Click();
+
+            Thread.Sleep(bannerTime / 5);
+            WebElement manageAccountButton = (WebElement)driver.FindElement(By.CssSelector("a[href='/settings']"));
+            manageAccountButton.Click();
+
+            Thread.Sleep(bannerTime / 5);
+            WebElement editButton = (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-default ant-btn-block']"));
+            editButton.Click();
+
+            Thread.Sleep(bannerTime / 5);
+            WebElement saveButton = (WebElement)driver.FindElement(By.CssSelector("button[type='submit']"));
+            saveButton.Click();
+
+            Thread.Sleep(bannerTime / 5);
+            Assert.IsTrue(driver.FindElement(By.CssSelector("div[class='Toastify__toast-body']")).Displayed);
+        }
+        [Test]
+        public void AdminGetUsers()
+        {
+            driver.Navigate().GoToUrl("http://130.162.232.178/login");
+            // already existing user
+            string login = adminLogin;
+            string password = adminPassword;
+
+            WebElement usernameInput = (WebElement)driver.FindElement(By.Id("loginForm_login"));
+            WebElement passwordInput = (WebElement)driver.FindElement(By.Id("loginForm_password"));
+
+            usernameInput.SendKeys(login);
+            passwordInput.SendKeys(password);
+
+            WebElement loginButton = (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-primary ant-btn-block']"));
+            loginButton.Click();
+
+            // wait explicitly
+            Thread.Sleep(bannerTime + 100);
+
+            WebElement profileButton = (WebElement)driver.FindElement(By.CssSelector("button[class='ant-btn ant-btn-default headerButton']"));
+            profileButton.Click();
+
+            Thread.Sleep(bannerTime / 5);
+            WebElement manageAccountButton = (WebElement)driver.FindElement(By.CssSelector("a[href='/settings']"));
+            manageAccountButton.Click();
+
+            WebElement manageAccountsTable = (WebElement)driver.FindElement(By.CssSelector("h2[class='ant-typography']"));
+            Assert.IsTrue(manageAccountsTable.Displayed);
+
         }
     }
 }

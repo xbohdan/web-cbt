@@ -24,8 +24,6 @@ namespace UnitTests.Integration_Tests
         private static Random random = new Random(DateTime.Now.Millisecond);
         string existingLogin = "amolnikita@gmail.com";
         string existingPassword = "sisKa_5_";
-        string bearerToken = "";
-        string userId = "-1";
 
         private int[] existingAnswers = new int[5];
         private string existingCategory;
