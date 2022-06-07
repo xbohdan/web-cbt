@@ -48,7 +48,7 @@ const useLogin = (form: FormInstance) => {
             accessToken: 'mockToken',
             banned: false,
             userId: 12345,
-            userStatus: 1,
+            userStatus: 0,
             login: 'mockLogin',
             gender: 'female',
             age: 19,
@@ -74,7 +74,9 @@ const useLogin = (form: FormInstance) => {
       // Set user in Redux store
       dispatch(setUser(user));
 
-      localStorage.setItem('AGE', getUserResponse.age!!.toString());
+      if (getUserResponse.age) {
+        localStorage.setItem('AGE', getUserResponse.age.toString());
+      }
       localStorage.setItem('GENDER', getUserResponse.gender);
       localStorage.setItem('STATUS', getUserResponse.userStatus.toString());
       localStorage.setItem('ID', getUserResponse.userId.toString());

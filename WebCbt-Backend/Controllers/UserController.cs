@@ -180,6 +180,11 @@ namespace WebCbt_Backend.Controllers
                 return Unauthorized();
             }
 
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != userId.ToString())
+            {
+                return Unauthorized();
+            }
+
             var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
@@ -291,7 +296,12 @@ namespace WebCbt_Backend.Controllers
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != userId.ToString())
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return Unauthorized();
+            }
+
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != userId.ToString())
             {
                 return Unauthorized();
             }

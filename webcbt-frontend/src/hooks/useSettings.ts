@@ -61,7 +61,9 @@ const useSettings = () => {
       dispatch(setUser(user));
 
       localStorage.setItem('LOGIN', formData.login);
-      localStorage.setItem('AGE', formData.age!!.toString());
+      if (formData.age) {
+        localStorage.setItem('AGE', formData.age.toString());
+      }
       localStorage.setItem('GENDER', formData.gender);
 
       toast.success('Account settings changed!');

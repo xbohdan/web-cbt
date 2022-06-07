@@ -49,6 +49,18 @@ export const authApi = createApi({
         body: credentials.body,
       }),
     }),
+    getUserAdmin: builder.mutation<GetUserResponse[], void>({
+      query: () => ({
+        url: '/',
+        method: 'GET',
+      }),
+    }),
+    deleteUser: builder.mutation<{}, string>({
+      query: (userId) => ({
+        url: `${userId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -57,4 +69,6 @@ export const {
   useRegistrationMutation,
   useGetUserMutation,
   usePutUserMutation,
+  useGetUserAdminMutation,
+  useDeleteUserMutation,
 } = authApi;

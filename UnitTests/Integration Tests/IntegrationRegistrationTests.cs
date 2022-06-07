@@ -12,15 +12,22 @@ namespace UnitTests.Integration_Tests
     [TestClass]
     public class IntegrationRegistrationTests
     {
+        // Our API: https://130.162.232.178:7198/
+        // Team CBT API: https://web-cbt.herokuapp.com/
+        // Team Typeracers: https://school-se-back.monicz.pl/
+
         private HttpClient _httpClient;
-        private static Random random = new Random();
+        private static Random random = new Random(DateTime.Now.Millisecond);
+        string registrationPostConnection = "https://web-cbt.herokuapp.com/user";
+        string existingLogin = "amolnikita@gmail.com";
+        string existingPassword = "sisKa_5_";
         public IntegrationRegistrationTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
             _httpClient = webAppFactory.CreateClient();
         }
 
-       // [TestMethod]
+        [TestMethod]
         public async Task Register_NonExistingUser()
         {
             // Registration == POST request
@@ -30,7 +37,8 @@ namespace UnitTests.Integration_Tests
             string chars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
             string end = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
             username += end;
-            
+            username += "@test.amol";
+
             string password = "aBcD45_/";
             var credentials = new Dictionary<string, string>()
             {
@@ -43,33 +51,102 @@ namespace UnitTests.Integration_Tests
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user", httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
             
             var codeResult = response.StatusCode;
 
             Assert.AreEqual(codeResult, System.Net.HttpStatusCode.OK);
         }
-        //[TestMethod]
+        [TestMethod]
         public async Task Register_ExistingUser()
         {
             // Registration == POST request
 
             var credentials = new Dictionary<string, string>()
             {
-                {"Login", "nikita555" },
-                {"Password", "sisKa_5" },
+                {"Login", existingLogin },
+                {"Password", existingPassword },
                 {"Sex","Male" },
                 {"Age", "19" }
             };
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user", httpContent);
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
 
             Assert.AreEqual(codeResult, System.Net.HttpStatusCode.Conflict);
+        }
+        [TestMethod]
+        public async Task Register_EmptyPassword_NonExistingEmail()
+        {
+            // generate random username
+            string username = "itest_";
+            string chars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
+            string end = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+            username += end;
+            username += "@test.amol";
+
+            var credentials = new Dictionary<string, string>()
+            {
+                {"Login", username },
+                {"Password", "" },
+                {"Sex","Male" },
+                {"Age", "19" }
+            };
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.BadRequest);
+
+        }
+
+        [TestMethod]
+        public async Task Register_EmptyPassword_ExistingEmail()
+        {
+            var credentials = new Dictionary<string, string>()
+            {
+                {"Login", existingLogin },
+                {"Password", "" },
+                {"Sex","Male" },
+                {"Age", "19" }
+            };
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.Conflict);
+
+        }
+
+        [TestMethod]
+        public async Task Register_ExistingPassword_EmptyEmail()
+        {
+            var credentials = new Dictionary<string, string>()
+            {
+                {"Login", "" },
+                {"Password", existingPassword },
+                {"Sex","Male" },
+                {"Age", "19" }
+            };
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(registrationPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.BadRequest);
+
         }
     }
 }
