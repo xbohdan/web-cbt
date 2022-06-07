@@ -25,6 +25,7 @@ export const userSlice = createSlice({
       state.gender = action.payload.gender;
       state.banned = action.payload.banned;
       state.userStatus = action.payload.userStatus;
+      state.userId = action.payload.userId;
     },
     logout: (state) => {
       state.login = '';
