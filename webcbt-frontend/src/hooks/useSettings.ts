@@ -35,17 +35,17 @@ const useSettings = () => {
       if (!formData.password) delete formData.password;
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
-      }else{
+      } else {
         const putUserRequest: PutUserRequest = {
           userId: userId,
           body: {
             login: formData.login,
             password: formData.password,
             age: formData.age,
-            gender: formData.gender
-          }
-        }
-        await putUser(putUserRequest).unwrap()
+            gender: formData.gender,
+          },
+        };
+        await putUser(putUserRequest).unwrap();
       }
 
       let user: User = {
@@ -55,7 +55,7 @@ const useSettings = () => {
         gender: formData.gender!!,
         userStatus: userStatus,
         banned: userIsBanned,
-        age: formData.age
+        age: formData.age,
       };
 
       dispatch(setUser(user));
@@ -84,7 +84,7 @@ const useSettings = () => {
     onSubmit,
     onSubmitFailed,
     userAge,
-    userGender
+    userGender,
   };
 };
 

@@ -5,7 +5,7 @@ import {MoodTestRequest} from '../../types/MoodTest';
 
 export const moodTestApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://130.162.232.178/api/moodtests/',
+    baseUrl: 'https://130.162.232.178/api/evaluation/',
     prepareHeaders: (headers, {getState}) => {
       // If we have a token, let's use that for authenticated requests
       const token = getToken(getState() as RootState);
@@ -16,25 +16,20 @@ export const moodTestApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllMoodTests: builder.mutation<{}, MoodTestRequest[]>({
+    getAllMoodTests: builder.mutation<MoodTestRequest[], void>({
       query: () => ({
         url: '/',
         method: 'GET',
       }),
     }),
-    submitMoodTest: builder.mutation<{}, MoodTestRequest>({
-      query: (answer: MoodTestRequest) => ({
-        url: '/',
-        method: 'POST',
-        body: answer,
-      }),
-    }),
     deleteMoodTest: builder.mutation<{}, number>({
       query: (evaluationId: number) => ({
-        url: `/${evaluationId}`,
+        url: `${evaluationId}`,
+        method: 'DELETE',
       }),
     }),
   }),
 });
 
-export const {useSubmitMoodTestMutation} = moodTestApi;
+export const {useGetAllMoodTestsMutation, useDeleteMoodTestMutation} =
+  moodTestApi;

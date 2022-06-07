@@ -11,7 +11,7 @@ export const initialState: User = {
   gender: localStorage.getItem('GENDER') || 'would rather not say',
   userStatus: Number(localStorage.getItem('STATUS')),
   banned: Boolean(localStorage.getItem('BANNED')),
-  userId: Number(localStorage.getItem('ID'))
+  userId: Number(localStorage.getItem('ID')),
 };
 
 export const userSlice = createSlice({
