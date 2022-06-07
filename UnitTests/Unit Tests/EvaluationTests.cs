@@ -16,10 +16,25 @@ namespace UnitTests.Unit_Tests
     [TestClass]
     public class EvaluationTests
     {
-        [TestMethod]
+        //[TestMethod]
         public void Create_NonExistingEvaluation()
         {
+            var evaluationToPost = new Evaluation()
+            {
+                EvaluationId = 1,
+                UserId = 325,
+                Question1 = 1,
+                Question2 = 1,
+                Question3 = 1,
+                Question4 = 1,
+                Question5 = 1,
+            };
+            var mockContext = new WebCbtDbContext();
+            var evaluationController = new EvaluationController(mockContext);
+            var result = evaluationController.PostEvaluation(evaluationToPost);
 
+            var expected = new OkResult();
+            Assert.AreEqual(result.Result.GetType(), expected.GetType());
         } 
     }
 }
