@@ -61,7 +61,7 @@ const AdminMoodTests = () => {
       setAllMoodTests(await getAllMoodTests().unwrap());
     };
     fetchAllMoodTests();
-  });
+  }, []);
 
   return (
     <Table
