@@ -49,6 +49,7 @@ const columns = [
   },
   {
     key: 'delete',
+    // @ts-ignore
     render: (_, record: MoodTestResponse) => (
       <Button onClick={async () => {
         const [deleteMoodTest] = useDeleteMoodTestMutation();
