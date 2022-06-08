@@ -67,7 +67,8 @@ const AdminMoodTests = () => {
 
   useEffect(() => {
     const fetchAllMoodTests = async () => {
-      setAllMoodTests(await getAllMoodTests().unwrap());
+      let allTests: MoodTestResponse[] = await getAllMoodTests().unwrap();
+      setAllMoodTests(allTests);
     };
     fetchAllMoodTests().then(() => {});
   }, [getAllMoodTests]);
