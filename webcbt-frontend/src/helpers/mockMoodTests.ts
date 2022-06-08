@@ -6,7 +6,7 @@ const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
 
-const getRandomUserId = (): number => {
+const getRandomId = (): number => {
   return getRandomInt(0, 5000);
 };
 
@@ -27,7 +27,8 @@ let mockMoodTests: MoodTestRequest[] = [];
 
 for (let i = 0; i < NUM_OF_TESTS; i++) {
   mockMoodTests.push({
-    userId: getRandomUserId(),
+    userId: getRandomId(),
+    evaluationId: getRandomId(),
     category: getRandomCategory(),
     question1: getRandomInt(1, 6),
     question2: getRandomInt(1, 6),
