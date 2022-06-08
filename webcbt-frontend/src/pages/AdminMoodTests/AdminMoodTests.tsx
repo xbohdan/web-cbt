@@ -1,6 +1,6 @@
 import './AdminMoodTests.css';
 import {Button, Table} from 'antd';
-import {useLayoutEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {isDev} from '../../config';
 import mockMoodTests from '../../helpers/mockMoodTests';
 import {useGetAllMoodTestsMutation, useDeleteMoodTestMutation} from '../../store/services/evaluation';
