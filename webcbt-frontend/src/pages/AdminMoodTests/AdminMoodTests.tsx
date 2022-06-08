@@ -4,13 +4,18 @@ import {useLayoutEffect, useState} from 'react';
 import {isDev} from '../../config';
 import mockMoodTests from '../../helpers/mockMoodTests';
 import {useGetAllMoodTestsMutation} from '../../store/services/evaluation';
-import {MoodTestRequest} from '../../types/MoodTest';
+import {MoodTestResponse} from '../../types/MoodTest';
 
 const columns = [
   {
     title: 'User ID',
     dataIndex: 'userId',
     key: 'userId',
+  },
+  {
+    title: 'Evaluation ID',
+    dataIndex: 'evaluationId',
+    key: 'evaluationId',
   },
   {
     title: 'Category',
@@ -54,7 +59,7 @@ const columns = [
 
 const AdminMoodTests = () => {
   const [getAllMoodTests] = useGetAllMoodTestsMutation();
-  let [allMoodTests, setAllMoodTests] = useState<MoodTestRequest[]>([]);
+  let [allMoodTests, setAllMoodTests] = useState<MoodTestResponse[]>([]);
 
   useLayoutEffect(() => {
     const fetchAllMoodTests = async () => {
