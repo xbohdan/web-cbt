@@ -65,11 +65,11 @@ const AdminMoodTests = () => {
   const [getAllMoodTests] = useGetAllMoodTestsMutation();
   let [allMoodTests, setAllMoodTests] = useState<MoodTestResponse[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchAllMoodTests = async () => {
       setAllMoodTests(await getAllMoodTests().unwrap());
     };
-    fetchAllMoodTests();
+    fetchAllMoodTests().then(() => {});
   }, [getAllMoodTests]);
 
   return (
