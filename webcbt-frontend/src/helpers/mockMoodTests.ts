@@ -1,4 +1,4 @@
-import {MoodTestCategory, MoodTestRequest} from '../types/MoodTest';
+import {MoodTestCategory, MoodTestResponse} from '../types/MoodTest';
 
 const NUM_OF_TESTS = 50;
 
@@ -23,7 +23,7 @@ const getRandomCategory = (): MoodTestCategory => {
   return moodTestCategories[getRandomInt(0, 6)] as MoodTestCategory;
 };
 
-let mockMoodTests: MoodTestRequest[] = [];
+let mockMoodTests: MoodTestResponse[] = [];
 
 for (let i = 0; i < NUM_OF_TESTS; i++) {
   mockMoodTests.push({
