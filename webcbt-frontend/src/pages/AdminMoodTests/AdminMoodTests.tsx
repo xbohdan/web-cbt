@@ -3,7 +3,7 @@ import {Button, Table} from 'antd';
 import {useLayoutEffect, useState} from 'react';
 import {isDev} from '../../config';
 import mockMoodTests from '../../helpers/mockMoodTests';
-import {useGetAllMoodTestsMutation} from '../../store/services/evaluation';
+import {useGetAllMoodTestsMutation, useDeleteMoodTestMutation} from '../../store/services/evaluation';
 import {MoodTestResponse} from '../../types/MoodTest';
 
 const columns = [
@@ -49,8 +49,11 @@ const columns = [
   },
   {
     key: 'delete',
-    render: () => (
-      <Button type="text" danger>
+    render: (_, record: MoodTestResponse) => (
+      <Button onClick={async () => {
+        const [deleteMoodTest] = useDeleteMoodTestMutation();
+        await deleteMoodTest(record.evaluationId);
+        }} type="text" danger>
         Delete
       </Button>
     ),
