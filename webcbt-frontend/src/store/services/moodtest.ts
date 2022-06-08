@@ -16,22 +16,11 @@ export const moodTestApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllMoodTests: builder.mutation<{}, MoodTestRequest[]>({
-      query: () => ({
-        url: '/',
-        method: 'GET',
-      }),
-    }),
     submitMoodTest: builder.mutation<{}, MoodTestRequest>({
       query: (answer: MoodTestRequest) => ({
         url: '/',
         method: 'POST',
         body: answer,
-      }),
-    }),
-    deleteMoodTest: builder.mutation<{}, number>({
-      query: (evaluationId: number) => ({
-        url: `/${evaluationId}`,
       }),
     }),
   }),
