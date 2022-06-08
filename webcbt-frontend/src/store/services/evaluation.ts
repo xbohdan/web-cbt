@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import getToken from '../../helpers/getToken';
 import {RootState} from '../store';
-import {MoodTestRequest} from '../../types/MoodTest';
+import {MoodTestResponse} from '../../types/MoodTest';
 
 export const moodTestApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -16,7 +16,7 @@ export const moodTestApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllMoodTests: builder.mutation<MoodTestRequest[], void>({
+    getAllMoodTests: builder.mutation<MoodTestResponse[], void>({
       query: () => ({
         url: '/',
         method: 'GET',
