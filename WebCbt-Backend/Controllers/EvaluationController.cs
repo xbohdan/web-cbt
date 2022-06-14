@@ -61,11 +61,13 @@ namespace WebCbt_Backend.Controllers
             var evaluationProps = typeof(Evaluation).GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(x => x.CanRead && x.PropertyType == typeof(int) && x.Name.StartsWith("Question"));
 
+            var maxValue = evaluation.Category == "Relationships" ? 6 : 4;
+
             foreach (var evaluationProp in evaluationProps)
             {
                 var evaluationValue = evaluationProp.GetValue(evaluation);
 
-                if (evaluationValue is not int question || question < 1 || question > 5)
+                if (evaluationValue is not int question || question < 0 || question > maxValue)
                 {
                     return false;
                 }
