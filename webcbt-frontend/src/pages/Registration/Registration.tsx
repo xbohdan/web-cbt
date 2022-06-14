@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Typography,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-} from 'antd';
+import {Form, Typography, Input, InputNumber, Button, Select} from 'antd';
 import {Link} from 'react-router-dom';
 
 import './Registration.css';
@@ -58,12 +51,14 @@ const Registration = () => {
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
         <Form.Item name="gender">
-            <Select disabled={isLoading} style={{textAlign: "left"}}>
-              <Select.Option value="male">male</Select.Option>
-              <Select.Option value="female">female</Select.Option>
-              <Select.Option value="other">other</Select.Option>
-              <Select.Option value="would rather not say">would rather not say</Select.Option>
-            </Select>
+          <Select disabled={isLoading} style={{textAlign: 'left'}}>
+            <Select.Option value="male">male</Select.Option>
+            <Select.Option value="female">female</Select.Option>
+            <Select.Option value="other">other</Select.Option>
+            <Select.Option value="would rather not say">
+              would rather not say
+            </Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item name="age">
           <label>

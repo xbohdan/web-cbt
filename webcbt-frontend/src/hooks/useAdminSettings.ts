@@ -1,4 +1,7 @@
-import {useDeleteUserMutation, useGetUserAdminMutation} from '../store/services/auth';
+import {
+  useDeleteUserMutation,
+  useGetUserAdminMutation,
+} from '../store/services/auth';
 import {useEffect, useState} from 'react';
 import {GetUserResponse} from '../types/User';
 import {isDev} from '../config';
@@ -9,39 +12,38 @@ const useAdminSettings = () => {
   const [getUserData] = useGetUserAdminMutation();
   const [userData, setUserData] = useState<GetUserResponse[]>([]);
   const [deleteUser] = useDeleteUserMutation();
-  
+
   useEffect(() => {
-    const GetUserData = async () =>
-    {
+    const GetUserData = async () => {
       let userDataList: GetUserResponse[];
       try {
         if (isDev) {
           userDataList = [
             {
               userId: 100,
-              login: "mockLogin0",
+              login: 'mockLogin0',
               age: 18,
-              gender: "male",
+              gender: 'male',
               userStatus: 0,
-              banned: false
+              banned: false,
             },
             {
               userId: 101,
-              login: "mockLogin1",
+              login: 'mockLogin1',
               age: 20,
-              gender: "female",
+              gender: 'female',
               userStatus: 0,
-              banned: false
+              banned: false,
             },
             {
               userId: 102,
-              login: "mockLogin2",
+              login: 'mockLogin2',
               age: 23,
-              gender: "other",
+              gender: 'other',
               userStatus: 0,
-              banned: false
-            }
-          ]
+              banned: false,
+            },
+          ];
         } else {
           userDataList = await getUserData().unwrap();
         }
@@ -52,13 +54,13 @@ const useAdminSettings = () => {
     };
 
     GetUserData().then(() => {});
-  }, [getUserData])
-  
+  }, [getUserData]);
+
   const OnDelete = async (userId: number) => {
     try {
       if (isDev) {
         await returnDataWithDelay(204, 'fast 3G');
-      }else{
+      } else {
         await deleteUser(userId.toString()).unwrap();
       }
       toast.success('User was successfully deleted');
@@ -70,8 +72,8 @@ const useAdminSettings = () => {
   return {
     setUserData,
     userData,
-    OnDelete
+    OnDelete,
   };
-}
+};
 
 export default useAdminSettings;

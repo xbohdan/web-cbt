@@ -3,7 +3,8 @@ import getToken from '../../helpers/getToken';
 import {
   GetUserResponse,
   LoginCredentials,
-  LoginResponse, PutUserRequest,
+  LoginResponse,
+  PutUserRequest,
   RegistrationRequest,
 } from '../../types/User';
 import {RootState} from '../store';
@@ -38,7 +39,7 @@ export const authApi = createApi({
     getUser: builder.mutation<GetUserResponse, string>({
       query: (userId) => ({
         url: `${userId}`,
-        method: 'GET'
+        method: 'GET',
       }),
     }),
     putUser: builder.mutation<{}, PutUserRequest>({
@@ -51,21 +52,23 @@ export const authApi = createApi({
     getUserAdmin: builder.mutation<GetUserResponse[], void>({
       query: () => ({
         url: '/',
-        method: 'GET'
+        method: 'GET',
       }),
     }),
     deleteUser: builder.mutation<{}, string>({
       query: (userId) => ({
         url: `${userId}`,
-        method: 'DELETE'
+        method: 'DELETE',
       }),
     }),
   }),
 });
 
-export const {useLoginMutation,
-              useRegistrationMutation,
-              useGetUserMutation,
-              usePutUserMutation,
-              useGetUserAdminMutation,
-              useDeleteUserMutation} = authApi;
+export const {
+  useLoginMutation,
+  useRegistrationMutation,
+  useGetUserMutation,
+  usePutUserMutation,
+  useGetUserAdminMutation,
+  useDeleteUserMutation,
+} = authApi;

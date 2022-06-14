@@ -1,10 +1,10 @@
-.moodTestsContent {
+.userMoodTestsContent {
   align-self: start;
   margin-top: 50px;
   grid-area: content;
 }
 
-.moodTestsBlocks {
+.userMoodTestsBlocks {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

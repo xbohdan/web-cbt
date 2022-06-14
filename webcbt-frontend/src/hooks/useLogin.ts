@@ -7,7 +7,12 @@ import handleLoginErrors from '../helpers/handleLoginErrors';
 import returnDataWithDelay from '../helpers/returnDataWithDelay';
 import {useGetUserMutation, useLoginMutation} from '../store/services/auth';
 import {setUser} from '../store/user/slice';
-import {GetUserResponse, LoginCredentials, LoginResponse, User} from '../types/User';
+import {
+  GetUserResponse,
+  LoginCredentials,
+  LoginResponse,
+  User,
+} from '../types/User';
 import useAppDispatch from './useAppDispatch';
 import jwt_decode from 'jwt-decode';
 
@@ -39,17 +44,21 @@ const useLogin = (form: FormInstance) => {
       // GET user/{userId}
       if (isDev) {
         getUserResponse = await returnDataWithDelay(
-          {accessToken: 'mockToken',
+          {
+            accessToken: 'mockToken',
             banned: false,
             userId: 12345,
             userStatus: 0,
             login: 'mockLogin',
             gender: 'female',
-            age: 19},
+            age: 19,
+          },
           'fast 3G',
         );
       } else {
-        getUserResponse = await getUser(jwt_decode<{userId: string}>(loginResponse.accessToken).userId).unwrap();
+        getUserResponse = await getUser(
+          jwt_decode<{userId: string}>(loginResponse.accessToken).userId,
+        ).unwrap();
       }
 
       // Prepare user object from successful response
@@ -59,7 +68,7 @@ const useLogin = (form: FormInstance) => {
         userId: getUserResponse.userId,
         gender: getUserResponse.gender,
         userStatus: getUserResponse.userStatus,
-        banned: getUserResponse.banned
+        banned: getUserResponse.banned,
       };
 
       // Set user in Redux store

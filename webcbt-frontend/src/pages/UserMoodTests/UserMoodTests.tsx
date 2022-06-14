@@ -1,6 +1,6 @@
 import {Typography} from 'antd';
 
-import './MoodTests.css';
+import './UserMoodTests.css';
 import MoodTestBlock from '../../components/MoodTestBlock/MoodTestBlock';
 
 // @ts-ignore
@@ -18,11 +18,11 @@ import happinessImg from './happiness.jpg';
 
 const {Title} = Typography;
 
-const MoodTests = () => {
+const UserMoodTests = () => {
   return (
-    <div className="moodTestsContent">
+    <div className="userMoodTestsContent">
       <Title>Mood Tests</Title>
-      <div className="moodTestsBlocks">
+      <div className="userMoodTestsBlocks">
         <MoodTestBlock
           title="Depression"
           cover={<img alt="depression" src={depressionImg} />}
@@ -58,4 +58,4 @@ const MoodTests = () => {
   );
 };
 
-export default MoodTests;
+export default UserMoodTests;

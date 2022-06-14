@@ -27,6 +27,19 @@ namespace WebCbt_Backend.Controllers
         {
             _context = context;
         }
+        
+        // GET: /evaluation
+        [Authorize(Policy = "AdminOnly")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Evaluation>>> GetEvaluations()
+        {
+            if (_context.Evaluations == null)
+            {
+                return NotFound();
+            }
+            
+            return await _context.Evaluations.ToListAsync();
+        }
 
         // POST: /moodtests
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
