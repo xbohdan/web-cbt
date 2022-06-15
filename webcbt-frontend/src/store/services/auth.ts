@@ -11,7 +11,7 @@ import {RootState} from '../store';
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://130.162.232.178/api/user/',
+    baseUrl: 'https://school-se-back.monicz.pl/user/',
     prepareHeaders: (headers, {getState}) => {
       // If we have a token, let's use that for authenticated requests
       const token = getToken(getState() as RootState);
