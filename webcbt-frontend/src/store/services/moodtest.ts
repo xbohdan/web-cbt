@@ -5,7 +5,7 @@ import {MoodTestRequest} from '../../types/MoodTest';
 
 export const moodTestApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://130.162.232.178/api/moodtests/',
+    baseUrl: 'https://school-se-back.monicz.pl/moodtests/',
     prepareHeaders: (headers, {getState}) => {
       // If we have a token, let's use that for authenticated requests
       const token = getToken(getState() as RootState);
