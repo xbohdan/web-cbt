@@ -5,13 +5,13 @@ export const moodTestApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMoodTests: builder.mutation<MoodTestResponse[], void>({
       query: () => ({
-        url: '/',
+        url: 'evaluation',
         method: 'GET',
       }),
     }),
     deleteMoodTest: builder.mutation<{}, number>({
       query: (evaluationId: number) => ({
-        url: `${evaluationId}`,
+        url: `evaluation/${evaluationId}`,
         method: 'DELETE',
       }),
     }),
