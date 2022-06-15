@@ -7,7 +7,12 @@ import handleLoginErrors from '../helpers/handleLoginErrors';
 import returnDataWithDelay from '../helpers/returnDataWithDelay';
 import {useGetUserMutation, useLoginMutation} from '../store/services/auth';
 import {setUser} from '../store/user/slice';
-import {GetUserResponse, LoginCredentials, LoginResponse, User} from '../types/User';
+import {
+  GetUserResponse,
+  LoginCredentials,
+  LoginResponse,
+  User,
+} from '../types/User';
 import useAppDispatch from './useAppDispatch';
 import jwt_decode from 'jwt-decode';
 
@@ -31,27 +36,31 @@ const useLogin = (form: FormInstance) => {
       } else {
         loginResponse = await login(formData).unwrap();
       }
-      
+
       // Set user in localStorage (to keep user logged in after page refresh)
       localStorage.setItem('LOGIN', formData.login);
       localStorage.setItem('TOKEN', loginResponse.accessToken);
-      
+
       // GET user/{userId}
       if (isDev) {
         getUserResponse = await returnDataWithDelay(
-          {accessToken: 'mockToken',
+          {
+            accessToken: 'mockToken',
             banned: false,
             userId: 12345,
             userStatus: 0,
             login: 'mockLogin',
             gender: 'female',
-            age: 19},
+            age: 19,
+          },
           'fast 3G',
         );
       } else {
-        getUserResponse = await getUser(jwt_decode<{userId: string}>(loginResponse.accessToken).userId).unwrap();
+        getUserResponse = await getUser(
+          jwt_decode<{userId: string}>(loginResponse.accessToken).userId,
+        ).unwrap();
       }
-      
+
       // Prepare user object from successful response
       let user: User = {
         login: formData.login,
@@ -59,13 +68,15 @@ const useLogin = (form: FormInstance) => {
         userId: getUserResponse.userId,
         gender: getUserResponse.gender,
         userStatus: getUserResponse.userStatus,
-        banned: getUserResponse.banned
+        banned: getUserResponse.banned,
       };
 
       // Set user in Redux store
       dispatch(setUser(user));
-      
-      localStorage.setItem('AGE', getUserResponse.age!!.toString());
+
+      if (getUserResponse.age) {
+        localStorage.setItem('AGE', getUserResponse.age.toString());
+      }
       localStorage.setItem('GENDER', getUserResponse.gender);
       localStorage.setItem('STATUS', getUserResponse.userStatus.toString());
       localStorage.setItem('ID', getUserResponse.userId.toString());

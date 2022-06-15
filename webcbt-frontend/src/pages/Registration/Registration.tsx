@@ -1,30 +1,16 @@
-import React, {useState} from 'react';
-import {
-  Form,
-  Typography,
-  Input,
-  Radio,
-  InputNumber,
-  Button,
-  RadioChangeEvent,
-} from 'antd';
+import React from 'react';
+import {Form, Typography, Input, InputNumber, Button, Select} from 'antd';
 import {Link} from 'react-router-dom';
 
 import './Registration.css';
 import validatePassword from '../../helpers/validatePassword';
 import useRegistration from '../../hooks/useRegistration';
-import {Gender} from '../../types/User';
 
 const {Title} = Typography;
 
 const Registration = () => {
   const [form] = Form.useForm();
-  const [radioValue, setRadioValue] = useState<Gender>('would rather not say');
   const {isLoading, onSubmit, onSubmitFailed} = useRegistration(form);
-
-  const setGender = (e: RadioChangeEvent) => {
-    setRadioValue(e.target.value);
-  };
 
   return (
     <div className="registration">
@@ -65,19 +51,14 @@ const Registration = () => {
           <Input.Password placeholder="Password" disabled={isLoading} />
         </Form.Item>
         <Form.Item name="gender">
-          <Radio.Group
-            onChange={setGender}
-            value={radioValue}
-            buttonStyle="solid"
-            disabled={isLoading}
-          >
-            <Radio.Button value="male">Male</Radio.Button>
-            <Radio.Button value="female">Female</Radio.Button>
-            <Radio.Button value="other">Other</Radio.Button>
-            <Radio.Button value="would rather not say">
-              Would rather not say
-            </Radio.Button>
-          </Radio.Group>
+          <Select disabled={isLoading} style={{textAlign: 'left'}}>
+            <Select.Option value="male">male</Select.Option>
+            <Select.Option value="female">female</Select.Option>
+            <Select.Option value="other">other</Select.Option>
+            <Select.Option value="would rather not say">
+              would rather not say
+            </Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item name="age">
           <label>

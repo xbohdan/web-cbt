@@ -10,7 +10,14 @@ namespace UnitTests.Integration_Tests
     [TestClass]
     public class IntegrationLoginTests
     {
+        // Our API: https://130.162.232.178:7198/
+        // Team CBT API: https://web-cbt.herokuapp.com/
+        // Team Typeracers: https://school-se-back.monicz.pl/
+
         private HttpClient _httpClient;
+        private string loginPostConnection = "https://web-cbt.herokuapp.com/user/login";
+        string existingLogin = "amolnikita@gmail.com";
+        string existingPassword = "sisKa_5_";
         public IntegrationLoginTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
@@ -24,14 +31,14 @@ namespace UnitTests.Integration_Tests
 
             var credentials = new Dictionary<string, string>()
             {
-                {"login", "nikita555" },
-                {"password", "sisKa_5" }
+                {"login", existingLogin },
+                {"password", existingPassword }
             };
 
             var JsonCredentials = JsonConvert.SerializeObject(credentials);
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user/login", httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
@@ -42,7 +49,7 @@ namespace UnitTests.Integration_Tests
         {
             var credentials = new Dictionary<string, string>()
             {
-                {"login", "non_existing_user" },
+                {"login", "non_existing_user@test.com" },
                 {"password", "non_existing_password" }
             };
 
@@ -50,11 +57,68 @@ namespace UnitTests.Integration_Tests
 
             var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://130.162.232.178:7198/user/login", httpContent);
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
 
             var codeResult = response.StatusCode;
 
             Assert.AreEqual(codeResult, System.Net.HttpStatusCode.Unauthorized);
+        }
+        [TestMethod]
+        public async Task Login_EmptyPassword_ExistingEmail()
+        {
+            var credentials = new Dictionary<string, string>()
+            {
+                {"login", existingLogin },
+                {"password", "" }
+            };
+
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.Unauthorized);
+        }
+        [TestMethod]
+        public async Task Login_EmptyEmail_ExistingPassword()
+        {
+            var credentials = new Dictionary<string, string>()
+            {
+                {"login", "" },
+                {"password", existingPassword }
+            };
+
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.BadRequest);
+        }
+        [TestMethod]
+        public async Task Login_EmptyBothFields()
+        {
+            var credentials = new Dictionary<string, string>()
+            {
+                {"login", "" },
+                {"password", "" }
+            };
+
+            var JsonCredentials = JsonConvert.SerializeObject(credentials);
+
+            var httpContent = new StringContent(JsonCredentials, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(loginPostConnection, httpContent);
+
+            var codeResult = response.StatusCode;
+
+            Assert.AreEqual(codeResult, System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

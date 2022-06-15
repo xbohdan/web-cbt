@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,13 +27,27 @@ namespace WebCbt_Backend.Controllers
         {
             _context = context;
         }
+        
+        // GET: /evaluation
+        [Authorize(Policy = "AdminOnly")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Evaluation>>> GetEvaluations()
+        {
+            if (_context.Evaluations == null)
+            {
+                return NotFound();
+            }
+            
+            return await _context.Evaluations.ToListAsync();
+        }
 
         // POST: /moodtests
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("~/moodtests")]
         public async Task<ActionResult<Evaluation>> PostEvaluation(Evaluation evaluation)
         {
-            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString()))
             {
                 return Unauthorized();
             }
@@ -42,6 +57,11 @@ namespace WebCbt_Backend.Controllers
                 return Problem("Entity set is null.");
             }
 
+            if (!EvaluationValid(evaluation))
+            {
+                return BadRequest();
+            }
+
             _context.Evaluations.Add(evaluation);
 
             await _context.SaveChangesAsync();
@@ -49,11 +69,32 @@ namespace WebCbt_Backend.Controllers
             return Ok();
         }
 
+        private static bool EvaluationValid(Evaluation evaluation)
+        {
+            var evaluationProps = typeof(Evaluation).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(x => x.CanRead && x.PropertyType == typeof(int) && x.Name.StartsWith("Question"));
+
+            var maxValue = evaluation.Category == "Relationships" ? 6 : 4;
+
+            foreach (var evaluationProp in evaluationProps)
+            {
+                var evaluationValue = evaluationProp.GetValue(evaluation);
+
+                if (evaluationValue is not int question || question < 0 || question > maxValue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // GET: /evaluation/findByUserId?userId=5
         [HttpGet("findByUserId")]
         public async Task<ActionResult<IEnumerable<Evaluation>>> FindEvaluationsByUserId(int userId)
         {
-            if (User.Identity?.IsAuthenticated != true)
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != userId.ToString()))
             {
                 return Unauthorized();
             }
@@ -87,7 +128,7 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            if (User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString())
             {
                 return Unauthorized();
             }
@@ -97,15 +138,21 @@ namespace WebCbt_Backend.Controllers
 
         // PUT: /evaluation/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvaluation(int id, Evaluation evaluation)
+        [HttpPut("{evaluationId}")]
+        public async Task<IActionResult> PutEvaluation(int evaluationId, Evaluation evaluation)
         {
-            if (User.Identity?.IsAuthenticated != true || User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.Identity?.IsAuthenticated != true
+                || (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString()))
             {
                 return Unauthorized();
             }
 
-            if (id != evaluation.EvaluationId)
+            if (evaluationId != evaluation.EvaluationId)
+            {
+                return BadRequest();
+            }
+
+            if (!EvaluationValid(evaluation))
             {
                 return BadRequest();
             }
@@ -118,7 +165,7 @@ namespace WebCbt_Backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EvaluationExists(id))
+                if (!EvaluationExists(evaluationId))
                 {
                     return NotFound();
                 }
@@ -157,7 +204,7 @@ namespace WebCbt_Backend.Controllers
                 return NotFound();
             }
 
-            if (User.FindFirstValue("userId") != evaluation.UserId.ToString())
+            if (User.FindFirstValue("userStatus") != "1" && User.FindFirstValue("userId") != evaluation.UserId.ToString())
             {
                 return Unauthorized();
             }

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Form, Typography, Input, Button, Select} from 'antd';
+import {Form, Typography, Input, Button, Select, InputNumber} from 'antd';
 
 import './Settings.css';
 import useSettings from '../../hooks/useSettings';
 
 const {Title} = Typography;
-const { Option } = Select;
+const {Option} = Select;
 
 const Settings = () => {
   const [form] = Form.useForm();
@@ -17,7 +17,7 @@ const Settings = () => {
     onSubmit,
     onSubmitFailed,
     userGender,
-    userAge
+    userAge,
   } = useSettings();
 
   return (
@@ -46,7 +46,11 @@ const Settings = () => {
           />
         </Form.Item>
         <Form.Item name="gender">
-          <Select defaultValue={userGender} disabled={isLoading || !isEditing} style={{textAlign: "left"}}>
+          <Select
+            defaultValue={userGender}
+            disabled={isLoading || !isEditing}
+            style={{textAlign: 'left'}}
+          >
             <Option value="male">male</Option>
             <Option value="female">female</Option>
             <Option value="other">other</Option>
@@ -54,7 +58,15 @@ const Settings = () => {
           </Select>
         </Form.Item>
         <Form.Item name="age">
-          <Input defaultValue={userAge} disabled={isLoading || !isEditing} />
+          <label>
+            Age:&nbsp;&nbsp;&nbsp;
+            <InputNumber
+              min={12}
+              max={125}
+              disabled={isLoading || !isEditing}
+              defaultValue={userAge}
+            />
+          </label>
         </Form.Item>
         <Form.Item hidden={!isEditing}>
           <Button type="primary" htmlType="submit" loading={isLoading} block>

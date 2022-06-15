@@ -11,7 +11,7 @@ export const initialState: User = {
   gender: localStorage.getItem('GENDER') || 'would rather not say',
   userStatus: Number(localStorage.getItem('STATUS')),
   banned: Boolean(localStorage.getItem('BANNED')),
-  userId: Number(localStorage.getItem('ID'))
+  userId: Number(localStorage.getItem('ID')),
 };
 
 export const userSlice = createSlice({
@@ -21,12 +21,22 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<User>) => {
       state.login = action.payload.login;
       state.accessToken = action.payload.accessToken;
+      state.age = action.payload.age;
+      state.gender = action.payload.gender;
+      state.banned = action.payload.banned;
+      state.userStatus = action.payload.userStatus;
+      state.userId = action.payload.userId;
     },
     logout: (state) => {
       state.login = '';
       state.accessToken = undefined;
       localStorage.removeItem('LOGIN');
       localStorage.removeItem('TOKEN');
+      localStorage.removeItem('GENDER');
+      localStorage.removeItem('AGE');
+      localStorage.removeItem('STATUS');
+      localStorage.removeItem('ID');
+      localStorage.removeItem('BANNED');
       toast.warn('Logged out');
     },
   },

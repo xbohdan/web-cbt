@@ -35,17 +35,17 @@ const useSettings = () => {
       if (!formData.password) delete formData.password;
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
-      }else{
+      } else {
         const putUserRequest: PutUserRequest = {
           userId: userId,
           body: {
             login: formData.login,
             password: formData.password,
             age: formData.age,
-            gender: formData.gender
-          }
-        }
-        await putUser(putUserRequest).unwrap()
+            gender: formData.gender,
+          },
+        };
+        await putUser(putUserRequest).unwrap();
       }
 
       let user: User = {
@@ -55,13 +55,15 @@ const useSettings = () => {
         gender: formData.gender!!,
         userStatus: userStatus,
         banned: userIsBanned,
-        age: formData.age
+        age: formData.age,
       };
 
       dispatch(setUser(user));
 
       localStorage.setItem('LOGIN', formData.login);
-      localStorage.setItem('AGE', formData.age!!.toString());
+      if (formData.age) {
+        localStorage.setItem('AGE', formData.age.toString());
+      }
       localStorage.setItem('GENDER', formData.gender);
 
       toast.success('Account settings changed!');
@@ -84,7 +86,7 @@ const useSettings = () => {
     onSubmit,
     onSubmitFailed,
     userAge,
-    userGender
+    userGender,
   };
 };
 

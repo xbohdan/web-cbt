@@ -18,3 +18,7 @@ export interface MoodTestRequest extends MoodTest {
   userId: number;
   category: MoodTestCategory;
 }
+
+export interface MoodTestResponse extends MoodTestRequest {
+  evaluationId: number;
+}

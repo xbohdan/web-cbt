@@ -25,7 +25,7 @@ export interface PutUserRequest {
     password?: string;
     age?: number | string;
     gender?: string;
-  }
+  };
   userId: number;
 }
 

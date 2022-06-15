@@ -17,15 +17,19 @@ import {
   relationshipsQuestions,
 } from '../../helpers/moodQuestions';
 import useAppSelector from '../../hooks/useAppSelector';
+import AdminMoodTests from '../../pages/AdminMoodTests/AdminMoodTests';
 import Login from '../../pages/Login/Login';
-import MoodTests from '../../pages/MoodTests/MoodTests';
+import UserMoodTests from '../../pages/UserMoodTests/UserMoodTests';
 import Registration from '../../pages/Registration/Registration';
 import Settings from '../../pages/Settings/Settings';
 import selectIsAuth from '../../store/user/selectors/selectIsAuth';
 import MoodTestForm from '../MoodTestForm/MoodTestForm';
+import AdminSettings from '../../pages/AdminSettings/AdminSettings';
+import selectStatus from '../../store/user/selectors/selectStatus';
 
 const Router = () => {
   const isAuth = useAppSelector(selectIsAuth);
+  const isAdmin = useAppSelector(selectStatus);
 
   return (
     <Routes>
@@ -36,10 +40,17 @@ const Router = () => {
           <Route path="*" element={<Navigate replace to="/login" />} />
         </>
       )}
-      {isAuth && (
+      {isAuth && isAdmin && (
+        <>
+          <Route path="/settings" element={<AdminSettings />} />
+          <Route path="/tests" element={<AdminMoodTests />} />
+        </>
+      )}
+      {isAuth && !isAdmin && (
         <>
           <Route path="/settings" element={<Settings />} />
-          <Route path="/tests" element={<MoodTests />} />
+          <Route path="/adminsettings" element={<AdminSettings />} />
+          <Route path="/tests" element={<UserMoodTests />} />
           <Route
             path="/tests/depression"
             element={
