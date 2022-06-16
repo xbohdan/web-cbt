@@ -28,7 +28,7 @@ const useMoodTest = (form: FormInstance, testCategory: MoodTestCategory) => {
       if (isDev) {
         await returnDataWithDelay(200, 'fast 3G');
       } else {
-        await submitMoodTest(moodTestRequest);
+        await submitMoodTest(moodTestRequest).unwrap();
       }
 
       // Display notification about successful registration
